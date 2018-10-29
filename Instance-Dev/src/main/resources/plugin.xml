@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+
+   <extension point="com.change_vision.astah.ui.actionSets">
+      <actionSet
+            label="%action_set_label"
+            visible="true"
+            id="Slab.Instance-Dev.actionSet">
+         <menu
+               id="Instance-Dev"
+               label="%menu_group"
+               path="tool/Instance-Dev">
+         </menu>
+         <action
+			   label="%menu_label"
+               icon="icons/sample.gif"
+               class="Slab.TemplateAction"
+               tooltip="%menu_tooltip"
+               menubarPath="tool/Instance-Dev/"
+               id="Instance-Dev">
+         </action>
+     </actionSet>
+   </extension>
+
+
+    <extension point="com.change_vision.astah.ui.view">
+
+ 	  	 <view
+    	  id="Slab.astah.ema.InstanceDiagramView2"
+    	  type="extraTab"
+      	class="Slab.astah.ema2.ExtraTab" />
+
+ 	  	 <view
+    	  id="Slab.astah.hayakawa.InstanceDiagramView"
+    	  type="extraTab"
+      	class="Slab.astah.hayakawa.ExtraTab" />
+
+
+      	<view
+		  id="Slab.astah.nzwPkg.InstanceCheckerView"
+		  type="extraTab"
+		  class="Slab.astah.nzwPkg.ExtraTabView" />
+
+      	<view
+		  id="Slab.astah.nzwPkg.InstanceChecker"
+		  type="extraTab"
+		  class="Slab.astah.aiso.TabView" />
+
+
+  	</extension>
+
+
+
+</plugin>
+
