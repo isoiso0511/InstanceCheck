@@ -7,6 +7,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -14,6 +17,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.change_vision.jude.api.inf.AstahAPI;
+import com.change_vision.jude.api.inf.exception.InvalidUsingException;
+import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
+import com.change_vision.jude.api.inf.model.IAttribute;
+import com.change_vision.jude.api.inf.model.IDiagram;
+import com.change_vision.jude.api.inf.model.IElement;
+import com.change_vision.jude.api.inf.model.IInstanceSpecification;
+import com.change_vision.jude.api.inf.model.IModel;
+import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.model.ISlot;
+import com.change_vision.jude.api.inf.presentation.IPresentation;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.project.ProjectEvent;
 import com.change_vision.jude.api.inf.project.ProjectEventListener;
@@ -28,53 +41,125 @@ public class TabView extends JPanel
     private final JTextArea textarea1 = new JTextArea();
     private final JTextArea textarea2 = new JTextArea();
 
+    AstahAPI api;
+    ProjectAccessor prjAccessor;
+    IModel project;
+    public String str;
+
     public TabView() {
+    	try {
+    		api = AstahAPI.getAstahAPI();
+    		prjAccessor = api.getProjectAccessor();
+    		prjAccessor.addProjectEventListener(this);
+    	} catch (ClassNotFoundException e) {
+    		e.getMessage();
+    	}
     	initComponents();
     }
 
-  	private void initComponents() {
+    private void initComponents() {
 		setLayout(new BorderLayout());
 		add(createLabelPane(),BorderLayout.WEST);
-		addProjectEventListener();
-  	}
+		//addProjectEventListener();
+	}
 
-  	private Container createLabelPane(){
-	  panel.setLayout(new FlowLayout());
-	  panel.add(checkButton);
-	  bigpanel.add(panel, BorderLayout.NORTH);
+    private Container createLabelPane(){
+    	panel.setLayout(new FlowLayout());
 
-	  final JScrollPane scrollpane1 = new JScrollPane(textarea1);
-	  final JScrollPane scrollpane2 = new JScrollPane(textarea2);
-	  scrollpane1.setPreferredSize(new Dimension(400,200));
+
+    	final JScrollPane scrollpane1 = new JScrollPane(textarea1);
+    	final JScrollPane scrollpane2 = new JScrollPane(textarea2);
+    	scrollpane1.setPreferredSize(new Dimension(400,200));
 	  scrollpane2.setPreferredSize(new Dimension(400,200));
-	  bigpanel.add(scrollpane1,BorderLayout.WEST);
-	  bigpanel.add(scrollpane2,BorderLayout.EAST);
+
 
 	  textarea1.setSize(300,400);
-	  //textarea.setText("input")???
+	  textarea1.setText("input");
 	  textarea1.setEditable(true);
 
 	  textarea2.setSize(300,400);
-	  //textarea.setText("input")???
+	  textarea2.setText("output");
 	  textarea2.setEditable(false);
 
 	  checkButton.addActionListener(new ActionListener(){
 		  public void actionPerformed(ActionEvent e){
-
+			  //ボタンクリック時のイベントを書く予定
+			  showDiagram();
+			  textarea2.setText(str);
 		  }
 	  });
+
+	  panel.add(checkButton);
+	  bigpanel.add(panel, BorderLayout.NORTH);
+
+	  bigpanel.add(scrollpane1,BorderLayout.WEST);
+	  bigpanel.add(scrollpane2,BorderLayout.EAST);
+
 	  return bigpanel;
   }
 
-  private void addProjectEventListener() {
-	  try {
-	    AstahAPI api = AstahAPI.getAstahAPI();
-	    ProjectAccessor projectAccessor = api.getProjectAccessor();
-	    projectAccessor.addProjectEventListener(this);
-	  } catch (ClassNotFoundException e) {
-	    e.getMessage();
-	  }
-  }
+    private void addProjectEventListener() {
+    	try {
+    		api = AstahAPI.getAstahAPI();
+    		prjAccessor = api.getProjectAccessor();
+    		prjAccessor.addProjectEventListener(this);
+    	} catch (ClassNotFoundException e) {
+    		e.getMessage();
+    	}
+    }
+
+    private void showDiagram() {
+    	try {
+			api = AstahAPI.getAstahAPI();
+			prjAccessor = api.getProjectAccessor();
+			project = prjAccessor.getProject();
+
+			List<IPresentation> presentations = new ArrayList<IPresentation>();
+			IDiagram[] diagrams = project.getDiagrams();
+			for (IDiagram diagram : diagrams) {//図を取得し、リストに格納
+	            presentations.addAll(Arrays.asList(diagram.getPresentations()));
+	        }
+			str = str + "Printing the InstanceSpecification"+ "\n";
+			str = str + "---"+"\n";
+
+			for(IPresentation presentation : presentations) {//インスタンスの表示
+				printPresentationInfo(presentation);
+				str = str +"---"+"\n";
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (ProjectNotFoundException e) {
+			e.printStackTrace();
+		} catch(InvalidUsingException e) {
+			e.printStackTrace();
+		}
+    }
+
+
+	private void printPresentationInfo(IPresentation presentation) {//presentationの中身取り出し
+		IElement model = presentation.getModel();
+		if (model instanceof IInstanceSpecification) {//インスタンス
+			IInstanceSpecification instanceSpecification = IInstanceSpecification.class.cast(model);
+			printInstanceSpecificationInfo(instanceSpecification);
+			return;
+		}
+		if (model instanceof INamedElement) {//インスタンス以外の図
+			INamedElement namedElement = INamedElement.class.cast(model);
+			str = str+" is Not InstanceSpecification.\n";
+			return;
+		}
+		str = str + "This Presentation is Not InstanceSpecification.\n";
+	}
+
+	private void printInstanceSpecificationInfo(IInstanceSpecification instanceSpecification) {
+		str = str + "instanceSpecification name : " + instanceSpecification.getName();
+		ISlot[] slots = instanceSpecification.getAllSlots();//インスタンスの情報
+		for (ISlot slot : slots) {
+			IAttribute attribute = slot.getDefiningAttribute();
+			String value = slot.getValue();
+			str = str + "attribute : " + attribute + ", value : " + value + "\n";
+		}
+	}
 
   @Override
   public void projectChanged(ProjectEvent e) {
@@ -104,7 +189,7 @@ public class TabView extends JPanel
 
   @Override
   public String getTitle() {
-    return "TabTest";
+    return "InstanceCheck";
   }
 
   public void activated() {
