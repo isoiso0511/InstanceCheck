@@ -41,10 +41,10 @@ public class TabView extends JPanel
     private final JTextArea textarea1 = new JTextArea();
     private final JTextArea textarea2 = new JTextArea();
 
-    AstahAPI api;
-    ProjectAccessor prjAccessor;
-    IModel project;
-    public String str;
+    private AstahAPI api;
+    private ProjectAccessor prjAccessor;
+    private IModel project;
+    private String str;
 
     public TabView() {
     	try {
@@ -83,9 +83,10 @@ public class TabView extends JPanel
 
 	  checkButton.addActionListener(new ActionListener(){
 		  public void actionPerformed(ActionEvent e){
-			  //ボタンクリック時のイベントを書く予定
+			  //ボタンクリック時のイベント
 			  showDiagram();
 			  textarea2.setText(str);
+			  str = "";
 		  }
 	  });
 
