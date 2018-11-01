@@ -69,8 +69,8 @@ public class TabView extends JPanel
 
     	final JScrollPane scrollpane1 = new JScrollPane(textarea1);
     	final JScrollPane scrollpane2 = new JScrollPane(textarea2);
-    	scrollpane1.setPreferredSize(new Dimension(400,200));
-	  scrollpane2.setPreferredSize(new Dimension(400,200));
+    	scrollpane1.setPreferredSize(new Dimension(600,200));
+	  scrollpane2.setPreferredSize(new Dimension(600,200));
 
 
 	  textarea1.setSize(300,400);
