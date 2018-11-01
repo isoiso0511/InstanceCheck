@@ -84,6 +84,7 @@ public class TabView extends JPanel
 	  checkButton.addActionListener(new ActionListener(){
 		  public void actionPerformed(ActionEvent e){
 			  //ボタンクリック時のイベント
+
 			  showDiagram();
 			  textarea2.setText(str);
 			  str = "";
@@ -120,12 +121,12 @@ public class TabView extends JPanel
 			for (IDiagram diagram : diagrams) {//図を取得し、リストに格納
 	            presentations.addAll(Arrays.asList(diagram.getPresentations()));
 	        }
-			str = str + "Printing the InstanceSpecification"+ "\n";
-			str = str + "---"+"\n";
+			//str = str + "Printing the InstanceSpecification"+ "\n";
+			//str = str + "---"+"\n";
 
 			for(IPresentation presentation : presentations) {//インスタンスの表示
 				printPresentationInfo(presentation);
-				str = str +"---"+"\n";
+				//str = str +"---"+"\n";
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -146,14 +147,14 @@ public class TabView extends JPanel
 		}
 		if (model instanceof INamedElement) {//インスタンス以外の図
 			INamedElement namedElement = INamedElement.class.cast(model);
-			str = str+" is Not InstanceSpecification.\n";
+			//str = str+" is Not InstanceSpecification.\n";
 			return;
 		}
-		str = str + "This Presentation is Not InstanceSpecification.\n";
+		//str = str + "This Presentation is Not InstanceSpecification.\n";
 	}
 
 	private void printInstanceSpecificationInfo(IInstanceSpecification instanceSpecification) {
-		str = str + "instanceSpecification name : " + instanceSpecification.getName();
+		str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
 		ISlot[] slots = instanceSpecification.getAllSlots();//インスタンスの情報
 		for (ISlot slot : slots) {
 			IAttribute attribute = slot.getDefiningAttribute();

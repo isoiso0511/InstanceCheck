@@ -1,49 +1,5 @@
 Manifest-Version: 1.0
-Astah-Edition: all
-Astah-Version: 6.6
-Bnd-LastModified: 1540943075861
-Build-Jdk: 1.8.0_191
-Built-By: cs15002
-Bundle-Activator: Slab.Activator
-Bundle-Description: %bundle.description
-Bundle-ManifestVersion: 2
-Bundle-Name: %bundle.name
-Bundle-SymbolicName: Slab.Instance-Dev; singleton:=true
-Bundle-Version: 1.0
-Created-By: Apache Maven Bundle Plugin
-Embed-Dependency: *;scope=compile|runtime;type=!pom
-Export-Package: Slab.astah.nzwPkg;uses:="com.change_vision.jude.api.inf.
- exception,com.change_vision.jude.api.inf.presentation,com.change_vision
- .jude.api.inf.model,com.change_vision.jude.api.inf.project,com.change_v
- ision.jude.api.inf.view,javax.swing,Slab.astah.common,com.change_vision
- .jude.api.inf.ui";version="1.0",Slab.astah.hayakawa;uses:="com.change_v
- ision.jude.api.inf.ui,com.change_vision.jude.api.inf.project,com.change
- _vision.jude.api.inf.view,com.change_vision.jude.api.inf.model,com.chan
- ge_vision.jude.api.inf.editor,javax.swing,Slab.astah.common,com.change_
- vision.jude.api.inf.presentation,com.change_vision.jude.api.inf.excepti
- on,Slab.astah.nzwPkg";version="1.0",Slab.astah.aiso;uses:="com.change_v
- ision.jude.api.inf.ui,com.change_vision.jude.api.inf.exception,com.chan
- ge_vision.jude.api.inf.project,com.change_vision.jude.api.inf.presentat
- ion,com.change_vision.jude.api.inf.model,com.change_vision.jude.api.inf
- ,javax.swing";version="1.0",Slab.astah.ema2;uses:="com.change_vision.ju
- de.api.inf.exception,com.change_vision.jude.api.inf.project,com.change_
- vision.jude.api.inf.view,com.change_vision.jude.api.inf.model,com.chang
- e_vision.jude.api.inf.editor,Slab.astah.common,com.change_vision.jude.a
- pi.inf.ui,com.change_vision.jude.api.inf.presentation,javax.swing,javax
- .swing.table,Slab.astah.nzwPkg";version="1.0",Slab;uses:="org.osgi.fram
- ework,com.change_vision.jude.api.inf.ui,com.change_vision.jude.api.inf.
- exception,com.change_vision.jude.api.inf.project,com.change_vision.jude
- .api.inf.model,javax.swing";version="1.0",Slab.astah.common;uses:="com.
- change_vision.jude.api.inf.project,com.change_vision.jude.api.inf.model
- ,com.change_vision.jude.api.inf.view,com.change_vision.jude.api.inf.pre
- sentation";version="1.0"
-Import-Package: com.change_vision.jude.api.inf;resolution:=optional,com.
- change_vision.jude.api.inf.editor;resolution:=optional,com.change_visio
- n.jude.api.inf.exception;resolution:=optional,com.change_vision.jude.ap
- i.inf.model;resolution:=optional,com.change_vision.jude.api.inf.present
- ation;resolution:=optional,com.change_vision.jude.api.inf.project;resol
- ution:=optional,com.change_vision.jude.api.inf.ui;resolution:=optional,
- com.change_vision.jude.api.inf.view;resolution:=optional,javax.swing;re
- solution:=optional,javax.swing.table;resolution:=optional,org.osgi.fram
- ework;version="[1.5,2)";resolution:=optional
-Tool: Bnd-1.50.0
+Built-By: aiso
+Build-Jdk: 1.8.0_181
+Created-By: Maven Integration for Eclipse
+
