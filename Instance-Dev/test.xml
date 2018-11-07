@@ -3,7 +3,6 @@
 		太郎君は静岡大学の学生である。
 		静岡大学の学生である相曽君の学籍番号は70510002である。
 	</scenario>
-</Question> 
  	<object id="001">
 		<class>学生</class>
 		<attribute name="名前">相曽</attribute>
