@@ -25,6 +25,11 @@
 
 
     <extension point="com.change_vision.astah.ui.view">
+    
+          	<view
+		  id="Slab.astah.nzwPkg.InstanceChecker"
+		  type="extraTab"
+		  class="Slab.astah.aiso.TabView" />
 
  	  	 <view
     	  id="Slab.astah.ema.InstanceDiagramView2"
@@ -42,10 +47,6 @@
 		  type="extraTab"
 		  class="Slab.astah.nzwPkg.ExtraTabView" />
 
-      	<view
-		  id="Slab.astah.nzwPkg.InstanceChecker"
-		  type="extraTab"
-		  class="Slab.astah.aiso.TabView" />
 
 
   	</extension>

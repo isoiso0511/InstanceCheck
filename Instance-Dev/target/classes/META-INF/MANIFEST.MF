@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Astah-Edition: all
 Astah-Version: 6.6
-Bnd-LastModified: 1540943075861
+Bnd-LastModified: 1540963458415
 Build-Jdk: 1.8.0_191
 Built-By: cs15002
 Bundle-Activator: Slab.Activator
