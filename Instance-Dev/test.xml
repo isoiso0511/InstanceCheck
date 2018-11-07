@@ -1,16 +1,5 @@
 <Question>
 	<scenario>
-		静岡大学の学生である相曽君の学籍番号は70510002である。
+		太郎君は静岡大学の学生である。
 	</scenario>
-
-	<object id="001">
-		<class>学生</class>
-		<attribute name="名前">相曽</attribute>
-		<attribute name="学籍番号">70510002</attribute>
-	</object>
-
-	<object id="002">
-		<class>大学</class>
-		<attribute name="大学名">静岡大学</attribute>
-	</object>
 </Question>
