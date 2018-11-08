@@ -1,15 +1,41 @@
-<Question>
+<Question　id="001">
 	<scenario>
-		太郎君は静岡大学の学生である。
-		静岡大学の学生である相曽君の学籍番号は70510002である。
+		静岡大学の学生である相曽輝の学籍番号は70510002で、山縣かずきの学籍番号は70510103である。
 	</scenario>
  	<object id="001">
 		<class>学生</class>
-		<attribute name="名前">相曽</attribute>
+		<attribute name="名前">相曽輝</attribute>
 		<attribute name="学籍番号">70510002</attribute>
 	</object>
- 	<object id="002">
+	<object id="002">
+		<class>学生</class>
+		<attribute name="名前">山縣かずき</attribute>
+		<attribute name="学籍番号">70510103</attribute>
+	</object>
+ 	<object id="003">
 		<class>大学</class>
 		<attribute name="大学名">静岡大学</attribute>
 	</object>
-</Question>>
+	<link>
+		<name>学生である</name>
+		<start>001</start>
+		<end>003</end>
+	</link>
+	<link>
+		<name>学生である</name>
+		<start>001</start>
+		<end>002</end>
+	</link>
+</Question>
+
+
+	<class id="001">
+		<name>学生</name>
+		<attribute name="名前">相曽輝</attribute>
+		<attribute name="学籍番号">70510002</attribute>
+	</class>
+	<link>
+		<start></start>
+		<end></end>
+		
+	</link>
