@@ -1,4 +1,4 @@
-<Question　id="001">
+<Question id="001">
 	<scenario>
 		静岡大学の学生である相曽輝の学籍番号は70510002で、山縣かずきの学籍番号は70510103である。
 	</scenario>
@@ -27,15 +27,3 @@
 		<end>002</end>
 	</link>
 </Question>
-
-
-	<class id="001">
-		<name>学生</name>
-		<attribute name="名前">相曽輝</attribute>
-		<attribute name="学籍番号">70510002</attribute>
-	</class>
-	<link>
-		<start></start>
-		<end></end>
-		
-	</link>
