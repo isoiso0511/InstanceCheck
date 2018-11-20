@@ -62,7 +62,7 @@ public class XmlReader{
 						System.out.println("--link--");
 						System.out.println(ele.getNodeName());
 
-						//objectの子ノードを出力
+						//linkの子ノードを出力
 						NodeList linkChild = node.getChildNodes();
 						for(int j=0 ; j < linkChild.getLength(); j++) {
 							Node linkNode = linkChild.item(j);
