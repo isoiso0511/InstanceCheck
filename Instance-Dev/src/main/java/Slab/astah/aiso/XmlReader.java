@@ -20,6 +20,7 @@ public class XmlReader{
 	public static void main(String[] args) throws Exception{
 		XmlReader xml = new XmlReader();
 	}
+
 	XmlReader(){
 		readDom();
 		//readSax();
