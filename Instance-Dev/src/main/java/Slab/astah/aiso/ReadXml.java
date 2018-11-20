@@ -16,6 +16,10 @@ public class ReadXml{
 		ReadXml xml = new ReadXml();
 	}
 	ReadXml(){
+		read();
+	}
+
+	private void read() {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
