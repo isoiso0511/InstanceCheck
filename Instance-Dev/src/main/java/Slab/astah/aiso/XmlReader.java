@@ -16,11 +16,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class ReadXml{
+public class XmlReader{
 	public static void main(String[] args) throws Exception{
-		ReadXml xml = new ReadXml();
+		XmlReader xml = new XmlReader();
 	}
-	ReadXml(){
+	XmlReader(){
 		readDom();
 		readSax();
 	}
@@ -55,7 +55,7 @@ public class ReadXml{
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		try {
 			SAXParser parser = factory.newSAXParser();
-			parser.parse(new File("test.xml"), new SaxXml());
+			parser.parse(new File("test.xml"), new SaxReader());
 		} catch (Exception e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -63,7 +63,7 @@ public class ReadXml{
 	}
 }
 
-class SaxXml extends DefaultHandler{
+class SaxReader extends DefaultHandler{
 	public void startDocument() {
 		System.out.println("読み込み開始");
 	}
