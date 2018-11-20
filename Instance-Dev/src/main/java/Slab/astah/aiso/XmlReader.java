@@ -22,7 +22,7 @@ public class XmlReader{
 	}
 	XmlReader(){
 		readDom();
-		readSax();
+		//readSax();
 	}
 
 	private void readDom() {
@@ -38,13 +38,48 @@ public class XmlReader{
 				Node node = nodeList.item(i);
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					Element ele = (Element)node;
-					if(ele.getNodeName().equals("object")) {//ノード名の取得
-						System.out.println( ele.getAttribute("id")+":"+ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+					if(node.getNodeName().equals("object")) {//ノード名の取得
+						System.out.println("--instance--");
+						System.out.println(ele.getNodeName() +":"+ele.getAttribute("id"));
+
+						//objectの子ノードを出力
+						NodeList objectChild = node.getChildNodes();
+						for(int j=0 ; j < objectChild.getLength(); j++) {
+							Node objectNode = objectChild.item(j);
+							if(objectNode.getNodeType() == Node.ELEMENT_NODE) {
+								ele = (Element)objectNode;
+								if(objectNode.getNodeName().equals("class")) {
+									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+								}else if(objectNode.getNodeName().equals("attribute")) {
+									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue()+":"+ele.getAttribute("name"));
+								}
+							}
+						}
+						System.out.println("------------");
+
+
 					}else if(ele.getNodeName().equals("link")) {
-						System.out.println(ele.getNodeName() + ": " + ele.getTextContent());
+						System.out.println("--link--");
+						System.out.println(ele.getNodeName());
+
+						//objectの子ノードを出力
+						NodeList linkChild = node.getChildNodes();
+						for(int j=0 ; j < linkChild.getLength(); j++) {
+							Node linkNode = linkChild.item(j);
+							if(linkNode.getNodeType() == Node.ELEMENT_NODE) {
+								ele = (Element)linkNode;
+								if(linkNode.getNodeName().equals("name")) {
+									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+								}else if(linkNode.getNodeName().equals("start")) {
+									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+								}else if(linkNode.getNodeName().equals("end")) {
+									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+								}
+							}
+						}
+						System.out.println("------------");
 					}
 				}
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
