@@ -32,18 +32,20 @@ public class XmlReader{
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(new File("test.xml"));//xml読み込み
 			Element element = doc.getDocumentElement();
-			System.out.println("Node: " + element.getNodeName());//ノードの取得
+			System.out.println("Node: " + element.getNodeName());//ルートノードの取得
 			//System.out.println("code: " + element.getAttribute("id"));//属性値取得
 			NodeList nodeList = element.getChildNodes();
 			for(int i = 0; i < nodeList.getLength(); i++) {
 				Node node = nodeList.item(i);
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					Element ele = (Element)node;
-					if(node.getNodeName().equals("inst")) {//ノード名の取得
+					if(node.getNodeName().equals("scenario")){//scenarioノード取得
+						System.out.println(ele.getNodeName() +":"+ele.getFirstChild().getNodeValue());
+					}else if(node.getNodeName().equals("inst")) {//instノード取得
 						System.out.println("--instance--");
 						System.out.println(ele.getNodeName() +":"+ele.getAttribute("id"));
 
-						//objectの子ノードを出力
+						//instの子ノード
 						NodeList instChild = node.getChildNodes();
 						for(int j=0 ; j < instChild.getLength(); j++) {
 							Node instNode = instChild.item(j);
@@ -59,11 +61,11 @@ public class XmlReader{
 						System.out.println("------------");
 
 
-					}else if(ele.getNodeName().equals("link")) {
+					}else if(ele.getNodeName().equals("link")) {//linkノード取得
 						System.out.println("--link--");
 						System.out.println(ele.getNodeName());
 
-						//linkの子ノードを出力
+						//linkの子ノード取得
 						NodeList linkChild = node.getChildNodes();
 						for(int j=0 ; j < linkChild.getLength(); j++) {
 							Node linkNode = linkChild.item(j);
