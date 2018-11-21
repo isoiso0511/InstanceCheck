@@ -39,19 +39,19 @@ public class XmlReader{
 				Node node = nodeList.item(i);
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					Element ele = (Element)node;
-					if(node.getNodeName().equals("object")) {//ノード名の取得
+					if(node.getNodeName().equals("inst")) {//ノード名の取得
 						System.out.println("--instance--");
 						System.out.println(ele.getNodeName() +":"+ele.getAttribute("id"));
 
 						//objectの子ノードを出力
-						NodeList objectChild = node.getChildNodes();
-						for(int j=0 ; j < objectChild.getLength(); j++) {
-							Node objectNode = objectChild.item(j);
-							if(objectNode.getNodeType() == Node.ELEMENT_NODE) {
-								ele = (Element)objectNode;
-								if(objectNode.getNodeName().equals("class")) {
+						NodeList instChild = node.getChildNodes();
+						for(int j=0 ; j < instChild.getLength(); j++) {
+							Node instNode = instChild.item(j);
+							if(instNode.getNodeType() == Node.ELEMENT_NODE) {
+								ele = (Element)instNode;
+								if(instNode.getNodeName().equals("class")) {
 									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-								}else if(objectNode.getNodeName().equals("attribute")) {
+								}else if(instNode.getNodeName().equals("attribute")) {
 									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue()+":"+ele.getAttribute("name"));
 								}
 							}
