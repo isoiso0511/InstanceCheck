@@ -17,6 +17,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XmlReader{
+	//test用メイン
 	public static void main(String[] args) throws Exception{
 		XmlReader xml = new XmlReader();
 	}
