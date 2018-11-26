@@ -17,6 +17,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XmlReader{
+
+	public static ObjectModel object;//xmlのオブジェクトを保存先
+
 	//test用メイン
 	public static void main(String[] args) throws Exception{
 		XmlReader xml = new XmlReader();
@@ -41,21 +44,29 @@ public class XmlReader{
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					Element ele = (Element)node;
 					if(node.getNodeName().equals("scenario")){//scenarioノード取得
-						System.out.println(ele.getNodeName() +":"+ele.getFirstChild().getNodeValue());
+						//System.out.println(ele.getNodeName() +":"+ele.getFirstChild().getNodeValue());
+						object.setScenario(ele.getFirstChild().getNodeValue());
+
 					}else if(node.getNodeName().equals("inst")) {//instノード取得
+						int j=0;
 						System.out.println("--instance--");
-						System.out.println(ele.getNodeName() +":"+ele.getAttribute("id"));
+						//System.out.println(ele.getNodeName() +":"+ele.getAttribute("id"));
+						object.getInst(j).setInstId(Integer.parseInt(ele.getAttribute("id")));//string→int変換
 
 						//instの子ノード
 						NodeList instChild = node.getChildNodes();
-						for(int j=0 ; j < instChild.getLength(); j++) {
+						for(j=0; j < instChild.getLength(); j++) {
 							Node instNode = instChild.item(j);
 							if(instNode.getNodeType() == Node.ELEMENT_NODE) {
 								ele = (Element)instNode;
 								if(instNode.getNodeName().equals("class")) {
-									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+									object.getInst(j).setClassName(ele.getFirstChild().getNodeValue());
+
 								}else if(instNode.getNodeName().equals("attribute")) {
-									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue()+":"+ele.getAttribute("name"));
+									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue()+":"+ele.getAttribute("name"));
+
+
 								}
 							}
 						}
@@ -73,11 +84,19 @@ public class XmlReader{
 							if(linkNode.getNodeType() == Node.ELEMENT_NODE) {
 								ele = (Element)linkNode;
 								if(linkNode.getNodeName().equals("name")) {
-									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+									object.getLink().setLinkName(ele.getFirstChild().getNodeValue());
+
 								}else if(linkNode.getNodeName().equals("start")) {
-									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+									object.getLink().setLinkStart(Integer.parseInt(ele.getFirstChild().getNodeValue()));
+
+
 								}else if(linkNode.getNodeName().equals("end")) {
-									System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
+									object.getLink().setLinkEnd(Integer.parseInt(ele.getFirstChild().getNodeValue()));
+
+
 								}
 							}
 						}

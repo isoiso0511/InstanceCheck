@@ -1,11 +1,55 @@
 package Slab.astah.aiso;
 class InstModel{
-	String instName;//instance名前
-	int instId;//instanceのid
-	String className;//instanceのクラス名
-	String[][] attribute;//属性名,属性値
+	private String instName;//instance名前
+	private int instId;//instanceのid
+	private String className;//instanceのクラス名
+	private String[][] attribute;//属性名,属性値
 
-	String linkName;//リンクの名前
-	int linkPoint;//リンク先
+	private String linkName;//リンクの名前
+	private int linkPoint;//リンク先
 
+
+	public InstModel getInst(){
+		return this;
+	}
+
+	public String getName() {
+		return this.instName;
+	}
+
+	public void setName(String _name) {
+		this.instName = _name;
+	}
+
+	public void setInstId(int _id) {
+		this.instId = _id;
+	}
+
+	public int getInstId() {
+		return this.instId;
+	}
+
+	public String getClassName() {
+		return this.className;
+	}
+
+	public void setClassName(String _name) {
+		this.className = _name;
+	}
+
+	public String getLinkName() {
+		return this.linkName;
+	}
+
+	public void setLinkName(String _name) {
+		this.linkName = _name;
+	}
+
+	public int getLinkPoint() {
+		return this.linkPoint;
+	}
+
+	public void setLinkPoint(int _number) {
+		this.linkPoint = _number;
+	}
 }
