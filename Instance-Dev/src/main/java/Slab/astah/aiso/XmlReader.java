@@ -16,14 +16,22 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class XmlReader{
+class XmlReader{
 
-	public static ObjectModel object;//xmlのオブジェクトを保存先
+	private ObjectModel object = new ObjectModel();//xmlのオブジェクトを保存先
 
-	//test用メイン
+	private InstModel inst;
+	private LinkModel link;
+
+	private int instCount = 0;
+	private int linkCount = 0;
+
+	//test用
+	/*
 	public static void main(String[] args) throws Exception{
 		XmlReader xml = new XmlReader();
 	}
+	*/
 
 	XmlReader(){
 		readDom();
@@ -34,9 +42,10 @@ public class XmlReader{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(new File("test.xml"));//xml読み込み
+			//Document doc = builder.parse(new File("test.xml"));//xml読み込み
+			Document doc = builder.parse(new File("C:/work/InstCheck/Instance-Dev/test.xml"));//astahのtest用
 			Element element = doc.getDocumentElement();
-			System.out.println("Node: " + element.getNodeName());//ルートノードの取得
+			//System.out.println("Node: " + element.getNodeName());//ルートノードの取得
 			//System.out.println("code: " + element.getAttribute("id"));//属性値取得
 			NodeList nodeList = element.getChildNodes();
 			for(int i = 0; i < nodeList.getLength(); i++) {
@@ -44,38 +53,41 @@ public class XmlReader{
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					Element ele = (Element)node;
 					if(node.getNodeName().equals("scenario")){//scenarioノード取得
-						//System.out.println(ele.getNodeName() +":"+ele.getFirstChild().getNodeValue());
-						object.setScenario(ele.getFirstChild().getNodeValue());
-
+						this.object.setScenario(ele.getFirstChild().getNodeValue());
 					}else if(node.getNodeName().equals("inst")) {//instノード取得
-						int j=0;
-						System.out.println("--instance--");
+						//System.out.println("--instance--");
 						//System.out.println(ele.getNodeName() +":"+ele.getAttribute("id"));
-						object.getInst(j).setInstId(Integer.parseInt(ele.getAttribute("id")));//string→int変換
+						inst = new InstModel();
+						object.addInstList(inst);
+						object.getInst(instCount).setInstId(Integer.parseInt(ele.getAttribute("id")));//string→int変換
 
 						//instの子ノード
 						NodeList instChild = node.getChildNodes();
-						for(j=0; j < instChild.getLength(); j++) {
+						for(int j=0; j < instChild.getLength(); j++) {
 							Node instNode = instChild.item(j);
 							if(instNode.getNodeType() == Node.ELEMENT_NODE) {
 								ele = (Element)instNode;
 								if(instNode.getNodeName().equals("class")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									object.getInst(j).setClassName(ele.getFirstChild().getNodeValue());
+									object.getInst(instCount).setClassName(ele.getFirstChild().getNodeValue());
 
 								}else if(instNode.getNodeName().equals("attribute")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue()+":"+ele.getAttribute("name"));
+
+									//属性、属性値の格納はそのうち
 
 
 								}
 							}
 						}
-						System.out.println("------------");
-
+						//System.out.println("------------");
+						instCount++;
 
 					}else if(ele.getNodeName().equals("link")) {//linkノード取得
-						System.out.println("--link--");
-						System.out.println(ele.getNodeName());
+						link = new LinkModel();
+						object.addLinkList(link);
+						//System.out.println("--link--");
+						//System.out.println(ele.getNodeName());
 
 						//linkの子ノード取得
 						NodeList linkChild = node.getChildNodes();
@@ -85,28 +97,31 @@ public class XmlReader{
 								ele = (Element)linkNode;
 								if(linkNode.getNodeName().equals("name")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									object.getLink().setLinkName(ele.getFirstChild().getNodeValue());
+									object.getLink(linkCount).setLinkName(ele.getFirstChild().getNodeValue());
 
 								}else if(linkNode.getNodeName().equals("start")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									object.getLink().setLinkStart(Integer.parseInt(ele.getFirstChild().getNodeValue()));
+									object.getLink(linkCount).setLinkStart(Integer.parseInt(ele.getFirstChild().getNodeValue()));
 
 
 								}else if(linkNode.getNodeName().equals("end")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									object.getLink().setLinkEnd(Integer.parseInt(ele.getFirstChild().getNodeValue()));
-
-
+									object.getLink(linkCount).setLinkEnd(Integer.parseInt(ele.getFirstChild().getNodeValue()));
 								}
 							}
 						}
-						System.out.println("------------");
+						//System.out.println("------------");
+						linkCount++;
 					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public ObjectModel getObject() {
+		return object;
 	}
 
 	private void readSax() {
@@ -119,6 +134,8 @@ public class XmlReader{
 			e.printStackTrace();
 		}
 	}
+
+
 }
 
 class SaxReader extends DefaultHandler{

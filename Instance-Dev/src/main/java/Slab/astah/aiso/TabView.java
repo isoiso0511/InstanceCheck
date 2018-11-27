@@ -45,6 +45,7 @@ public class TabView extends JPanel
     private ProjectAccessor prjAccessor;
     private IModel project;
     private String str;
+    private XmlReader xml;
 
     public TabView() {
     	try {
@@ -65,50 +66,39 @@ public class TabView extends JPanel
 
     private Container createLabelPane(){
     	panel.setLayout(new FlowLayout());
-
-
     	final JScrollPane scrollpane1 = new JScrollPane(textarea1);
     	final JScrollPane scrollpane2 = new JScrollPane(textarea2);
     	scrollpane1.setPreferredSize(new Dimension(600,200));
-	  scrollpane2.setPreferredSize(new Dimension(600,200));
+    	scrollpane2.setPreferredSize(new Dimension(600,200));
 
 
-	  textarea1.setSize(300,400);
-	  textarea1.setText("input");
-	  textarea1.setEditable(true);
+		textarea1.setSize(300,400);
+		textarea1.setText("scenario");
+		textarea1.setEditable(false);
 
-	  textarea2.setSize(300,400);
-	  textarea2.setText("output");
-	  textarea2.setEditable(false);
+		textarea2.setSize(300,400);
+		textarea2.setText("output");
+		textarea2.setEditable(false);
 
-	  checkButton.addActionListener(new ActionListener(){
-		  public void actionPerformed(ActionEvent e){
-			  //ボタンクリック時のイベント
+		checkButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				//ボタンクリック時のイベント
 
-			  showDiagram();
-			  textarea2.setText(str);
-			  str = "";
-		  }
-	  });
+				showDiagram();
+				xml = new XmlReader();
+				System.out.println(xml.getObject().getScenario());
+				textarea1.setText(xml.getObject().getScenario());
+				textarea2.setText(str);
+				str = "";
+			}
+		});
 
-	  panel.add(checkButton);
-	  bigpanel.add(panel, BorderLayout.NORTH);
-
-	  bigpanel.add(scrollpane1,BorderLayout.WEST);
-	  bigpanel.add(scrollpane2,BorderLayout.EAST);
-
-	  return bigpanel;
-  }
-
-    private void addProjectEventListener() {
-    	try {
-    		api = AstahAPI.getAstahAPI();
-    		prjAccessor = api.getProjectAccessor();
-    		prjAccessor.addProjectEventListener(this);
-    	} catch (ClassNotFoundException e) {
-    		e.getMessage();
-    	}
-    }
+		panel.add(checkButton);
+		bigpanel.add(panel, BorderLayout.NORTH);
+		bigpanel.add(scrollpane1,BorderLayout.WEST);
+		bigpanel.add(scrollpane2,BorderLayout.EAST);
+		return bigpanel;
+	}
 
     private void showDiagram() {
     	try {
