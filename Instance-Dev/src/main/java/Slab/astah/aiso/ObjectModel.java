@@ -21,6 +21,10 @@ class ObjectModel{
 		this.instList.add(_inst);
 	}
 
+	public List<InstModel> getInstList(){
+		return instList;
+	}
+
 	public LinkModel getLink(int i){
 		return this.linkList.get(i);
 	}
@@ -31,6 +35,10 @@ class ObjectModel{
 
 	public void addLinkList(LinkModel _link) {
 		this.linkList.add(_link);
+	}
+
+	public List<LinkModel> getLinkList(){
+		return linkList;
 	}
 
 	public String getScenario(){

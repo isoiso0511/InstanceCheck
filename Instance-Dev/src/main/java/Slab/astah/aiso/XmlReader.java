@@ -73,14 +73,12 @@ class XmlReader{
 
 								}else if(instNode.getNodeName().equals("attribute")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue()+":"+ele.getAttribute("name"));
-
 									//属性、属性値の格納はそのうち
 
 
 								}
 							}
 						}
-						//System.out.println("------------");
 						instCount++;
 
 					}else if(ele.getNodeName().equals("link")) {//linkノード取得

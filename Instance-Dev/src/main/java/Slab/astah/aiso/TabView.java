@@ -19,13 +19,11 @@ import javax.swing.JTextArea;
 import com.change_vision.jude.api.inf.AstahAPI;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
-import com.change_vision.jude.api.inf.model.IAttribute;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IInstanceSpecification;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
-import com.change_vision.jude.api.inf.model.ISlot;
 import com.change_vision.jude.api.inf.presentation.IPresentation;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.project.ProjectEvent;
@@ -86,7 +84,6 @@ public class TabView extends JPanel
 
 				showDiagram();
 				xml = new XmlReader();
-				System.out.println(xml.getObject().getScenario());
 				textarea1.setText(xml.getObject().getScenario());
 				textarea2.setText(str);
 				str = "";
@@ -144,6 +141,7 @@ public class TabView extends JPanel
 	}
 
 	private void printInstanceSpecificationInfo(IInstanceSpecification instanceSpecification) {
+		/*
 		str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
 		ISlot[] slots = instanceSpecification.getAllSlots();//インスタンスの情報
 		for (ISlot slot : slots) {
@@ -151,6 +149,17 @@ public class TabView extends JPanel
 			String value = slot.getValue();
 			str = str + "attribute : " + attribute + ", value : " + value + "\n";
 		}
+		*/
+		System.out.println(xml.getObject().getInst(1).getName());
+		/*
+		for(int i = 0;i < xml.getObject().getInstList().size();i++) {
+			if(instanceSpecification.getName().equals(xml.getObject().getInst(i).getName())) {
+				str = xml.getObject().getInst(i).getName()+"が見つかりました\n";
+			}else {
+				str = xml.getObject().getInst(i).getName()+"が見つかりません\n";
+			}
+		}
+		*/
 	}
 
   @Override
