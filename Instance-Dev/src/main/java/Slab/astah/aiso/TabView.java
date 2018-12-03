@@ -150,7 +150,8 @@ public class TabView extends JPanel
 			str = str + "attribute : " + attribute + ", value : " + value + "\n";
 		}
 		*/
-		System.out.println(xml.getObject().getInst(1).getName());
+		System.out.println(xml.getObject().getInst(0).getName());
+		//instanceSpecification.getName().equals(object.getInst())
 		/*
 		for(int i = 0;i < xml.getObject().getInstList().size();i++) {
 			if(instanceSpecification.getName().equals(xml.getObject().getInst(i).getName())) {

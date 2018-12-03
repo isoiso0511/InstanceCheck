@@ -58,9 +58,9 @@ class XmlReader{
 						//System.out.println("--instance--");
 						//System.out.println(ele.getNodeName() +":"+ele.getAttribute("id"));
 						inst = new InstModel();
+						inst.setName(ele.getFirstChild().getNodeValue());
+						inst.setInstId(Integer.parseInt(ele.getAttribute("id")));//string→int変換
 						object.addInstList(inst);
-						object.getInst(instCount).setInstId(Integer.parseInt(ele.getAttribute("id")));//string→int変換
-
 						//instの子ノード
 						NodeList instChild = node.getChildNodes();
 						for(int j=0; j < instChild.getLength(); j++) {
@@ -69,7 +69,7 @@ class XmlReader{
 								ele = (Element)instNode;
 								if(instNode.getNodeName().equals("class")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									object.getInst(instCount).setClassName(ele.getFirstChild().getNodeValue());
+									inst.setClassName(ele.getFirstChild().getNodeValue());
 
 								}else if(instNode.getNodeName().equals("attribute")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue()+":"+ele.getAttribute("name"));
@@ -79,14 +79,11 @@ class XmlReader{
 								}
 							}
 						}
+						object.addInstList(inst);
 						instCount++;
 
 					}else if(ele.getNodeName().equals("link")) {//linkノード取得
 						link = new LinkModel();
-						object.addLinkList(link);
-						//System.out.println("--link--");
-						//System.out.println(ele.getNodeName());
-
 						//linkの子ノード取得
 						NodeList linkChild = node.getChildNodes();
 						for(int j=0 ; j < linkChild.getLength(); j++) {
@@ -95,20 +92,20 @@ class XmlReader{
 								ele = (Element)linkNode;
 								if(linkNode.getNodeName().equals("name")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									object.getLink(linkCount).setLinkName(ele.getFirstChild().getNodeValue());
+									link.setLinkName(ele.getFirstChild().getNodeValue());
 
 								}else if(linkNode.getNodeName().equals("start")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									object.getLink(linkCount).setLinkStart(Integer.parseInt(ele.getFirstChild().getNodeValue()));
+									link.setLinkStart(Integer.parseInt(ele.getFirstChild().getNodeValue()));
 
 
 								}else if(linkNode.getNodeName().equals("end")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									object.getLink(linkCount).setLinkEnd(Integer.parseInt(ele.getFirstChild().getNodeValue()));
+									link.setLinkEnd(Integer.parseInt(ele.getFirstChild().getNodeValue()));
 								}
 							}
 						}
-						//System.out.println("------------");
+						object.addLinkList(link);
 						linkCount++;
 					}
 				}
