@@ -1,9 +1,14 @@
 package Slab.astah.aiso;
+
+import java.util.ArrayList;
+import java.util.List;
+
 class InstModel{
 	private String instName;//instance名前
 	private int instId;//instanceのid
 	private String className;//instanceのクラス名
-	private String[][] attribute;//属性名,属性値
+
+	private List<AttributeModel> attriList = new ArrayList<AttributeModel>();
 
 	private String linkName;//リンクの名前
 	private int linkPoint;//リンク先
@@ -35,6 +40,18 @@ class InstModel{
 
 	public void setClassName(String _name) {
 		this.className = _name;
+	}
+
+	public void addAttriList(AttributeModel _attri) {
+		this.attriList.add(_attri);
+	}
+
+	public List<AttributeModel> getAttriList(){
+		return attriList;
+	}
+
+	public AttributeModel getAttribute(int i){
+		return attriList.get(i);
 	}
 
 	public String getLinkName() {

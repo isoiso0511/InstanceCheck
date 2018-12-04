@@ -22,6 +22,7 @@ class XmlReader{
 
 	private InstModel inst;
 	private LinkModel link;
+	private AttributeModel attri;
 
 	private int instCount = 0;
 	private int linkCount = 0;
@@ -63,7 +64,7 @@ class XmlReader{
 						object.addInstList(inst);
 						//instの子ノード
 						NodeList instChild = node.getChildNodes();
-						for(int j=0; j < instChild.getLength(); j++) {
+						for(int j=0; j < instChild.getLength(); j++) {//instの子ノードを取得
 							Node instNode = instChild.item(j);
 							if(instNode.getNodeType() == Node.ELEMENT_NODE) {
 								ele = (Element)instNode;
@@ -72,10 +73,10 @@ class XmlReader{
 									inst.setClassName(ele.getFirstChild().getNodeValue());
 
 								}else if(instNode.getNodeName().equals("attribute")) {
-									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue()+":"+ele.getAttribute("name"));
-									//属性、属性値の格納はそのうち
-
-
+									attri = new AttributeModel();
+									attri.setName(ele.getAttribute("name"));//属性名の取得
+									attri.setValue(ele.getFirstChild().getNodeValue());//属性値の取得
+									inst.addAttriList(attri);//instのattributelistに追加
 								}
 							}
 						}
@@ -86,7 +87,7 @@ class XmlReader{
 						link = new LinkModel();
 						//linkの子ノード取得
 						NodeList linkChild = node.getChildNodes();
-						for(int j=0 ; j < linkChild.getLength(); j++) {
+						for(int j=0 ; j < linkChild.getLength(); j++) {//linkの子ノード取得
 							Node linkNode = linkChild.item(j);
 							if(linkNode.getNodeType() == Node.ELEMENT_NODE) {
 								ele = (Element)linkNode;

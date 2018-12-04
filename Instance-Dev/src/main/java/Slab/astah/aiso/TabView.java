@@ -24,6 +24,7 @@ import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IInstanceSpecification;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.model.ISlot;
 import com.change_vision.jude.api.inf.presentation.IPresentation;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
 import com.change_vision.jude.api.inf.project.ProjectEvent;
@@ -43,7 +44,10 @@ public class TabView extends JPanel
     private ProjectAccessor prjAccessor;
     private IModel project;
     private String str;
-    private XmlReader xml;
+    private XmlReader xml;//xmlから取得したオブジェクト図、情報の保存
+    private ObjectModel createObject;//学習者の作成したオブジェクト図を保存
+    private InstModel inst;//格納するための仮のinst
+    private AttributeModel attri;
 
     public TabView() {
     	try {
@@ -82,8 +86,8 @@ public class TabView extends JPanel
 			public void actionPerformed(ActionEvent e){
 				//ボタンクリック時のイベント
 
-				showDiagram();
 				xml = new XmlReader();
+				getDiagram();
 				textarea1.setText(xml.getObject().getScenario());
 				textarea2.setText(str);
 				str = "";
@@ -97,23 +101,25 @@ public class TabView extends JPanel
 		return bigpanel;
 	}
 
-    private void showDiagram() {
+    private void diagnosisObject() {
+    	//オブジェクト図とxmlの照らし合わせる診断を予定
+    }
+
+    private void getDiagram() {
     	try {
 			api = AstahAPI.getAstahAPI();
 			prjAccessor = api.getProjectAccessor();
 			project = prjAccessor.getProject();
+			createObject = new ObjectModel();
 
 			List<IPresentation> presentations = new ArrayList<IPresentation>();
 			IDiagram[] diagrams = project.getDiagrams();
 			for (IDiagram diagram : diagrams) {//図を取得し、リストに格納
 	            presentations.addAll(Arrays.asList(diagram.getPresentations()));
 	        }
-			//str = str + "Printing the InstanceSpecification"+ "\n";
-			//str = str + "---"+"\n";
 
-			for(IPresentation presentation : presentations) {//インスタンスの表示
-				printPresentationInfo(presentation);
-				//str = str +"---"+"\n";
+			for(IPresentation presentation : presentations) {//インスタンス含んだ図の取得
+				getPresentationInfo(presentation);
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -125,33 +131,43 @@ public class TabView extends JPanel
     }
 
 
-	private void printPresentationInfo(IPresentation presentation) {//presentationの中身取り出し
+	private void getPresentationInfo(IPresentation presentation) {//presentationの中身取り出し
 		IElement model = presentation.getModel();
 		if (model instanceof IInstanceSpecification) {//インスタンス
 			IInstanceSpecification instanceSpecification = IInstanceSpecification.class.cast(model);
-			printInstanceSpecificationInfo(instanceSpecification);
+			saveInstanceSpecificationInfo(instanceSpecification);
 			return;
+
 		}
 		if (model instanceof INamedElement) {//インスタンス以外の図
 			INamedElement namedElement = INamedElement.class.cast(model);
-			//str = str+" is Not InstanceSpecification.\n";
 			return;
+
 		}
-		//str = str + "This Presentation is Not InstanceSpecification.\n";
 	}
 
-	private void printInstanceSpecificationInfo(IInstanceSpecification instanceSpecification) {
-		/*
+	private void saveInstanceSpecificationInfo(IInstanceSpecification instanceSpecification) {
+		//図の属性名、属性値の取得
+		inst = new InstModel();
+		attri = new AttributeModel();//一時的な属性名、属性値の保存
+
+		//クラス名も取得する（後回し）
 		str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
+		inst.setName(instanceSpecification.getName());
+
 		ISlot[] slots = instanceSpecification.getAllSlots();//インスタンスの情報
+
+		//クラス名の取得
 		for (ISlot slot : slots) {
-			IAttribute attribute = slot.getDefiningAttribute();
-			String value = slot.getValue();
-			str = str + "attribute : " + attribute + ", value : " + value + "\n";
+			String s = slot.getDefiningAttribute()+"";//String変換方法がわからないので強引に作った
+			attri.setName(s);//属性名の格納
+			attri.setValue(slot.getValue());//属性値の格納
+
+			//出力結果に出力（後に削除予定！！！）
+			str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
 		}
-		*/
-		System.out.println(xml.getObject().getInst(0).getName());
-		//instanceSpecification.getName().equals(object.getInst())
+		inst.addAttriList(attri);
+		createObject.addInstList(inst);
 		/*
 		for(int i = 0;i < xml.getObject().getInstList().size();i++) {
 			if(instanceSpecification.getName().equals(xml.getObject().getInst(i).getName())) {
