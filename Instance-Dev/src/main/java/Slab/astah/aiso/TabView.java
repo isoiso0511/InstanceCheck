@@ -36,6 +36,7 @@ public class TabView extends JPanel
       implements IPluginExtraTabView, ProjectEventListener {
 	private final JPanel panel = new JPanel();
 	private final JPanel bigpanel = new JPanel();
+	private final JButton xmlButton = new JButton("scenario");
 	private final JButton checkButton = new JButton("Check!");
     private final JTextArea textarea1 = new JTextArea();
     private final JTextArea textarea2 = new JTextArea();
@@ -81,19 +82,27 @@ public class TabView extends JPanel
 		textarea2.setSize(300,400);
 		textarea2.setText("output");
 		textarea2.setEditable(false);
-
-		checkButton.addActionListener(new ActionListener(){
+		
+		xmlButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				//ボタンクリック時のイベント
-
+				//xmlの選択するイベント
 				xml = new XmlReader();
-				getDiagram();
 				textarea1.setText(xml.getObject().getScenario());
-				textarea2.setText(str);
-				str = "";
 			}
 		});
 
+		checkButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				//診断のイベント
+				if(xml != null){//xmlが選択されている場合
+					getDiagram();
+					textarea2.setText(str);
+					str = "";
+				}
+			}
+		});
+		
+		panel.add(xmlButton);
 		panel.add(checkButton);
 		bigpanel.add(panel, BorderLayout.NORTH);
 		bigpanel.add(scrollpane1,BorderLayout.WEST);
@@ -148,8 +157,8 @@ public class TabView extends JPanel
 
 	private void saveInstanceSpecificationInfo(IInstanceSpecification instanceSpecification) {
 		//図の属性名、属性値の取得
-		inst = new InstModel();
-		attri = new AttributeModel();//一時的な属性名、属性値の保存
+		inst = new InstModel();//一時的なインスタンス、後にaddをして追加
+		attri = new AttributeModel();//一時的な属性名、属性値後にaddして追加
 
 		//クラス名も取得する（後回し）
 		str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
@@ -168,6 +177,9 @@ public class TabView extends JPanel
 		}
 		inst.addAttriList(attri);
 		createObject.addInstList(inst);
+		
+		//リンクのモデルへの格納とapiの理解がまだ・・・
+		
 		/*
 		for(int i = 0;i < xml.getObject().getInstList().size();i++) {
 			if(instanceSpecification.getName().equals(xml.getObject().getInst(i).getName())) {
