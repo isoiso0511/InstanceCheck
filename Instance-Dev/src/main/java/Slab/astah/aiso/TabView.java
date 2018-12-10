@@ -19,9 +19,11 @@ import javax.swing.JTextArea;
 import com.change_vision.jude.api.inf.AstahAPI;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.ProjectNotFoundException;
+import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IInstanceSpecification;
+import com.change_vision.jude.api.inf.model.ILinkEnd;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
 import com.change_vision.jude.api.inf.model.ISlot;
@@ -82,7 +84,7 @@ public class TabView extends JPanel
 		textarea2.setSize(300,400);
 		textarea2.setText("output");
 		textarea2.setEditable(false);
-		
+
 		xmlButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				//xmlの選択するイベント
@@ -95,13 +97,16 @@ public class TabView extends JPanel
 			public void actionPerformed(ActionEvent e){
 				//診断のイベント
 				if(xml != null){//xmlが選択されている場合
-					getDiagram();
+					getDiagram();//作成したオブジェクト図を同じモデルに格納
+					diagnoseObject();//診断
 					textarea2.setText(str);
 					str = "";
+				}else {
+					//xmlが選択されていないことを示す
 				}
 			}
 		});
-		
+
 		panel.add(xmlButton);
 		panel.add(checkButton);
 		bigpanel.add(panel, BorderLayout.NORTH);
@@ -110,14 +115,14 @@ public class TabView extends JPanel
 		return bigpanel;
 	}
 
-    private void diagnosisObject() {
+    private void diagnoseObject() {
     	//オブジェクト図とxmlの照らし合わせる診断を予定
+
+
     }
 
     private void getDiagram() {
     	try {
-			api = AstahAPI.getAstahAPI();
-			prjAccessor = api.getProjectAccessor();
 			project = prjAccessor.getProject();
 			createObject = new ObjectModel();
 
@@ -130,8 +135,6 @@ public class TabView extends JPanel
 			for(IPresentation presentation : presentations) {//インスタンス含んだ図の取得
 				getPresentationInfo(presentation);
 			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (ProjectNotFoundException e) {
 			e.printStackTrace();
 		} catch(InvalidUsingException e) {
@@ -160,26 +163,28 @@ public class TabView extends JPanel
 		inst = new InstModel();//一時的なインスタンス、後にaddをして追加
 		attri = new AttributeModel();//一時的な属性名、属性値後にaddして追加
 
-		//クラス名も取得する（後回し）
 		str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
 		inst.setName(instanceSpecification.getName());
 
-		ISlot[] slots = instanceSpecification.getAllSlots();//インスタンスの情報
+		ISlot[] slots = instanceSpecification.getAllSlots();//インスタンスの属性情報
+		IClass c  = instanceSpecification.getClassifier();//インスタンスのクラスの情報
+		ILinkEnd[] links = instanceSpecification.getLinkEnds();//インスタンスのリンク端の情報
 
-		//クラス名の取得
+		inst.setClassName(c.getName());//インスタンスのクラス名をセット
+
 		for (ISlot slot : slots) {
-			String s = slot.getDefiningAttribute()+"";//String変換方法がわからないので強引に作った
+			String s = slot.getDefiningAttribute()+"";//String変換方法がわからないので強引に作成
 			attri.setName(s);//属性名の格納
 			attri.setValue(slot.getValue());//属性値の格納
 
-			//出力結果に出力（後に削除予定！！！）
+			//出力結果に出力（後に削除）
 			str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
 		}
 		inst.addAttriList(attri);
 		createObject.addInstList(inst);
-		
+
 		//リンクのモデルへの格納とapiの理解がまだ・・・
-		
+
 		/*
 		for(int i = 0;i < xml.getObject().getInstList().size();i++) {
 			if(instanceSpecification.getName().equals(xml.getObject().getInst(i).getName())) {
