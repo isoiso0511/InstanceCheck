@@ -117,6 +117,12 @@ public class TabView extends JPanel
 
     private void diagnoseObject() {
     	//オブジェクト図とxmlの照らし合わせる診断を予定
+    	List<InstModel> cList = new ArrayList<InstModel>();//学習者の作ったリストの取得
+    	List<InstModel> instList = new ArrayList<InstModel>();//xmlでの記述したListの取得
+    	cList = createObject.getInstList();
+    	instList = xml.getObject().getInstList();
+
+
 
 
     }
