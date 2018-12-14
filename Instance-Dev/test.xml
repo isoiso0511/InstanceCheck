@@ -4,16 +4,19 @@
 	</scenario>
  	<inst id="001">
 		<class>学生</class>
+		<name>相曽輝</name>
 		<attribute name="名前">相曽輝</attribute>
 		<attribute name="学籍番号">70510002</attribute>
 	</inst>
 	<inst id="002">
 		<class>学生</class>
+		<name>山縣かずき</name>
 		<attribute name="名前">山縣かずき</attribute>
 		<attribute name="学籍番号">70510103</attribute>
 	</inst>
  	<inst id="003">
 		<class>大学</class>
+		<name>静岡大学</name>
 		<attribute name="大学名">静岡大学</attribute>
 	</inst>
 	<link>

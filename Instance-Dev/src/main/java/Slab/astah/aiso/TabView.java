@@ -118,13 +118,69 @@ public class TabView extends JPanel
     private void diagnoseObject() {
     	//オブジェクト図とxmlの照らし合わせる診断を予定
     	List<InstModel> cList = new ArrayList<InstModel>();//学習者の作ったリストの取得
-    	List<InstModel> instList = new ArrayList<InstModel>();//xmlでの記述したListの取得
     	cList = createObject.getInstList();
-    	instList = xml.getObject().getInstList();
-
-
-
-
+    	
+    	for(InstModel inst : cList){
+    		checkInst(inst);
+    	}
+    }
+    
+    private void checkInst(InstModel inst){
+    	List<InstModel> xmlList = new ArrayList<InstModel>();//xmlでの記述したListの取得
+    	xmlList = xml.getObject().getInstList();
+    	int instNum = 0;//同名のインスタンスの個数を表示２つある場合の診断も用意する
+    	for(InstModel xinst : xmlList){
+    		if(xinst != null){
+		    	if(inst.getName().equals(xinst.getName())){
+		    		instNum++;
+		    		
+		    		if(instNum > 1){
+		    			str = str + "インスタンス名:"+ inst.getName() +"　　同名インスタンスが複数存在している\n";
+		    		}
+		    		
+		    		//診断には必要ないので実際に動かすときには消す
+		    		str = str + "インスタンス名:"+inst.getName()+"は存在しています。"+"\n";
+		    		checkAttribute(inst,xinst);//属性名,属性値を調べる
+		    	}
+    		}
+    	}
+    	
+    	//診断出力部
+    	if(instNum == 0){
+    		str = str+ "インスタンス名:"+ inst.getName() +"  インスタンス名が正しくない、またはインスタンスが不足している可能性がある\n";
+    	}
+    }
+    
+    private void checkAttribute(InstModel inst,InstModel xinst){
+    	//インスタンス同士の属性名、属性値チェックを行う
+    	//属性名の学習者ごとの命名→チェックのアルゴリズムについても考える（xmlに複数記述するなど）
+    	//xinstはxml上のインスタンス
+    	List<AttributeModel> cList = new ArrayList<AttributeModel>();
+    	List<AttributeModel> xList = new ArrayList<AttributeModel>();
+    	
+    	cList = inst.getAttriList();//学習者の作成したオブジェクト図のインスタンスの属性リスト
+    	xList = inst.getAttriList();//xml
+    	boolean findFlag = false;
+    	
+    	for(AttributeModel cAttri : cList){
+    		if(cAttri != null){
+    			for(AttributeModel xAttri : xList){
+    				
+	    			//今の所完全一致の体で作っている変更するかも
+			    	if(cAttri.getName().equals(xAttri.getName()) && 
+			    						cAttri.getValue().equals(xAttri.getValue())){
+			    		//診断には必要ないので実際に動かすときには消す
+			    		str = str + "属性名:"+cAttri.getName()+"は一致しています。"+"\n";
+			    		findFlag = true;
+			    	}
+    			}
+    			//flag
+    			if(!findFlag){
+    				str = str + "属性名:"+cAttri.getName()+"は一致しています。"+"\n";
+    			}
+    		}
+    	}
+    	
     }
 
     private void getDiagram() {
@@ -176,30 +232,25 @@ public class TabView extends JPanel
 		IClass c  = instanceSpecification.getClassifier();//インスタンスのクラスの情報
 		ILinkEnd[] links = instanceSpecification.getLinkEnds();//インスタンスのリンク端の情報
 
-		inst.setClassName(c.getName());//インスタンスのクラス名をセット
+		if(c != null){
+			inst.setClassName(c.getName());//インスタンスのクラス名をセット
+		}
 
-		for (ISlot slot : slots) {
-			String s = slot.getDefiningAttribute()+"";//String変換方法がわからないので強引に作成
-			attri.setName(s);//属性名の格納
-			attri.setValue(slot.getValue());//属性値の格納
-
-			//出力結果に出力（後に削除）
-			str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
+		if(slots != null){
+			for (ISlot slot : slots) {
+				String s = slot.getDefiningAttribute()+"";//String変換方法がわからないので強引に作成
+				attri.setName(s);//属性名の格納
+				attri.setValue(slot.getValue());//属性値の格納
+	
+				//出力結果に出力（後に削除）
+				str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
+			}
 		}
 		inst.addAttriList(attri);
 		createObject.addInstList(inst);
 
 		//リンクのモデルへの格納とapiの理解がまだ・・・
 
-		/*
-		for(int i = 0;i < xml.getObject().getInstList().size();i++) {
-			if(instanceSpecification.getName().equals(xml.getObject().getInst(i).getName())) {
-				str = xml.getObject().getInst(i).getName()+"が見つかりました\n";
-			}else {
-				str = xml.getObject().getInst(i).getName()+"が見つかりません\n";
-			}
-		}
-		*/
 	}
 
   @Override

@@ -43,8 +43,8 @@ class XmlReader{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(new File("C:/work/InstCheck/Instance-Dev/test.xml"));//xml読み込み
-			//Document doc = builder.parse(new File("C:/WorkSpace/InstChecker/Instance-Dev/test.xml"));//astahのtest用
+			//Document doc = builder.parse(new File("C:/work/InstCheck/Instance-Dev/test.xml"));//xml読み込み
+			Document doc = builder.parse(new File("C:/WorkSpace/InstChecker/Instance-Dev/test.xml"));//astahのtest用
 			Element element = doc.getDocumentElement();
 			//System.out.println("Node: " + element.getNodeName());//ルートノードの取得
 			//System.out.println("code: " + element.getAttribute("id"));//属性値取得
@@ -61,7 +61,7 @@ class XmlReader{
 						inst = new InstModel();
 						inst.setName(ele.getFirstChild().getNodeValue());
 						inst.setInstId(Integer.parseInt(ele.getAttribute("id")));//string→int変換
-						object.addInstList(inst);
+						//object.addInstList(inst);
 						//instの子ノード
 						NodeList instChild = node.getChildNodes();
 						for(int j=0; j < instChild.getLength(); j++) {//instの子ノードを取得
@@ -77,6 +77,8 @@ class XmlReader{
 									attri.setName(ele.getAttribute("name"));//属性名の取得
 									attri.setValue(ele.getFirstChild().getNodeValue());//属性値の取得
 									inst.addAttriList(attri);//instのattributelistに追加
+								}else if(instNode.getNodeName().equals("name")){
+									inst.setName(ele.getFirstChild().getNodeValue());
 								}
 							}
 						}
