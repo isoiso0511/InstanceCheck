@@ -23,6 +23,7 @@ import com.change_vision.jude.api.inf.model.IClass;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IInstanceSpecification;
+import com.change_vision.jude.api.inf.model.ILink;
 import com.change_vision.jude.api.inf.model.ILinkEnd;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
@@ -135,19 +136,22 @@ public class TabView extends JPanel
 		    		instNum++;
 		    		
 		    		if(instNum > 1){
-		    			str = str + "インスタンス名:"+ inst.getName() +"　　同名インスタンスが複数存在している\n";
+		    			str = str + "インスタンス名:"+ inst.getName() +" 同名インスタンスが複数存在している\n";
+		    			continue;
 		    		}
 		    		
-		    		//診断には必要ないので実際に動かすときには消す
-		    		str = str + "インスタンス名:"+inst.getName()+"は存在しています。"+"\n";
-		    		checkAttribute(inst,xinst);//属性名,属性値を調べる
+		    		if(instNum == 1){
+			    		//診断には必要ないので実際に動かすときには消す
+			    		str = str + "インスタンス名:"+inst.getName()+" は存在しています。"+"\n";
+			    		checkAttribute(inst,xinst);//属性名,属性値を調べる
+		    		}
 		    	}
     		}
     	}
     	
     	//診断出力部
     	if(instNum == 0){
-    		str = str+ "インスタンス名:"+ inst.getName() +"  インスタンス名が正しくない、またはインスタンスが不足している可能性がある\n";
+    		str = str+ "インスタンス名:"+ inst.getName() +" インスタンス名が正しくない、または必要のないインスタンス\n";
     	}
     }
     
@@ -159,28 +163,35 @@ public class TabView extends JPanel
     	List<AttributeModel> xList = new ArrayList<AttributeModel>();
     	
     	cList = inst.getAttriList();//学習者の作成したオブジェクト図のインスタンスの属性リスト
-    	xList = inst.getAttriList();//xml
+    	xList = xinst.getAttriList();//xml
     	boolean findFlag = false;
     	
     	for(AttributeModel cAttri : cList){
-    		if(cAttri != null){
+    		if(!isNullOrEmpty(cAttri.getName()) && !isNullOrEmpty(cAttri.getValue())){
     			for(AttributeModel xAttri : xList){
     				
 	    			//今の所完全一致の体で作っている変更するかも
 			    	if(cAttri.getName().equals(xAttri.getName()) && 
-			    						cAttri.getValue().equals(xAttri.getValue())){
+			    						cAttri.getValue().equals(xAttri.getValue()) && 
+			    						findFlag == false){
 			    		//診断には必要ないので実際に動かすときには消す
-			    		str = str + "属性名:"+cAttri.getName()+"は一致しています。"+"\n";
+			    		str = str + "属性名:"+cAttri.getName()+"　は一致しています。"+"\n";
 			    		findFlag = true;
+			    		continue;
 			    	}
     			}
-    			//flag
-    			if(!findFlag){
-    				str = str + "属性名:"+cAttri.getName()+"は一致しています。"+"\n";
-    			}
+    		}else if(!isNullOrEmpty(cAttri.getName()) && isNullOrEmpty(cAttri.getValue())){
+    			str = str + "インスタンス名："+inst.getName()+" 属性名:"+cAttri.getName()+"　の属性値が入力されていません"+"\n";
     		}
-    	}
-    	
+    	}	
+    }
+    private boolean checkSameName(){
+    	//同名インスタンス、属性名が存在している場合のチェック
+    	return true;
+    }
+    
+    private boolean isNullOrEmpty(String str){
+    	return str == null || str.isEmpty();
     }
 
     private void getDiagram() {
@@ -225,7 +236,7 @@ public class TabView extends JPanel
 		inst = new InstModel();//一時的なインスタンス、後にaddをして追加
 		attri = new AttributeModel();//一時的な属性名、属性値後にaddして追加
 
-		str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
+		//str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
 		inst.setName(instanceSpecification.getName());
 
 		ISlot[] slots = instanceSpecification.getAllSlots();//インスタンスの属性情報
@@ -243,13 +254,25 @@ public class TabView extends JPanel
 				attri.setValue(slot.getValue());//属性値の格納
 	
 				//出力結果に出力（後に削除）
-				str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
+				//str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
 			}
 		}
 		inst.addAttriList(attri);
 		createObject.addInstList(inst);
 
 		//リンクのモデルへの格納とapiの理解がまだ・・・
+		if(links != null){
+			for (ILinkEnd link : links) {
+				/*
+				String s = link.getDefiningAttribute()+"";//String変換方法がわからないので強引に作成
+				attri.setName(s);//属性名の格納
+				attri.setValue(link.getValue());//属性値の格納
+	
+				//出力結果に出力（後に削除）
+				str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
+				*/
+			}
+		}
 
 	}
 
