@@ -50,8 +50,6 @@ public class TabView extends JPanel
     private String str;
     private XmlReader xml;//xmlから取得したオブジェクト図、情報の保存
     private ObjectModel createObject;//学習者の作成したオブジェクト図を保存
-    private InstModel inst;//格納するための仮のinst
-    private AttributeModel attri;
 
     public TabView() {
     	try {
@@ -90,6 +88,7 @@ public class TabView extends JPanel
 			public void actionPerformed(ActionEvent e){
 				//xmlの選択するイベント
 				xml = new XmlReader();
+				//showObject(xml.Object);
 				textarea1.setText(xml.getObject().getScenario());
 			}
 		});
@@ -99,6 +98,7 @@ public class TabView extends JPanel
 				//診断のイベント
 				if(xml != null){//xmlが選択されている場合
 					getDiagram();//作成したオブジェクト図を同じモデルに格納
+					//showObject(createObject);
 					diagnoseObject();//診断
 					textarea2.setText(str);
 					str = "";
@@ -142,7 +142,7 @@ public class TabView extends JPanel
 		    		
 		    		if(instNum == 1){
 			    		//診断には必要ないので実際に動かすときには消す
-			    		str = str + "インスタンス名:"+inst.getName()+" は存在しています。"+"\n";
+			    		//str = str + "インスタンス名:"+inst.getName()+" は存在しています。"+"\n";
 			    		checkAttribute(inst,xinst);//属性名,属性値を調べる
 		    		}
 		    	}
@@ -167,30 +167,57 @@ public class TabView extends JPanel
     	boolean findFlag = false;
     	
     	for(AttributeModel cAttri : cList){
-    		if(!isNullOrEmpty(cAttri.getName()) && !isNullOrEmpty(cAttri.getValue())){
-    			for(AttributeModel xAttri : xList){
-    				
-	    			//今の所完全一致の体で作っている変更するかも
-			    	if(cAttri.getName().equals(xAttri.getName()) && 
-			    						cAttri.getValue().equals(xAttri.getValue()) && 
-			    						findFlag == false){
-			    		//診断には必要ないので実際に動かすときには消す
-			    		str = str + "属性名:"+cAttri.getName()+"　は一致しています。"+"\n";
-			    		findFlag = true;
-			    		continue;
-			    	}
-    			}
-    		}else if(!isNullOrEmpty(cAttri.getName()) && isNullOrEmpty(cAttri.getValue())){
-    			str = str + "インスタンス名："+inst.getName()+" 属性名:"+cAttri.getName()+"　の属性値が入力されていません"+"\n";
+    		//チェック用あとで削除
+    		//System.out.println("インスタンス名："+inst.getName()+" 属性名:"+cAttri.getName()+cAttri.getValue());
+    		if(cAttri != null){
+	    		if(!isNullOrEmpty(cAttri.getName()) && !isNullOrEmpty(cAttri.getValue())){
+	    			for(AttributeModel xAttri : xList){
+	    				
+		    			//今の所完全一致の体で作っている変更するかも
+				    	if(cAttri.getName().equals(xAttri.getName()) && 
+				    						cAttri.getValue().equals(xAttri.getValue())){
+				    		
+				    		//診断には必要ないので実際に動かすときには消す
+				    		str = str + "インスタンス名："+inst.getName()+ "属性名:"+cAttri.getName()+"　は一致しています。"+"\n";
+				    		findFlag = true;
+				    	}else{
+				    		str = str + "インスタンス名："+inst.getName()+ "属性名:"+cAttri.getName()+"　は見つかりませんでした。"+"\n";
+				    	}
+	    			}
+	    		}else if(!isNullOrEmpty(cAttri.getName()) && isNullOrEmpty(cAttri.getValue())){
+	    			str = str + "インスタンス名："+inst.getName()+" 属性名:"+cAttri.getName()+"　の属性値が入力されていません"+"\n";
+	    		}
     		}
     	}	
+    }
+    private void showObject(ObjectModel object){
+    	List<InstModel> instList = new ArrayList<InstModel>();
+    	List<AttributeModel> attriList = new ArrayList<AttributeModel>();
+    	
+    	
+    	instList = object.getInstList();
+    	for(InstModel inst:instList){
+    		if(inst != null){
+    			attriList = inst.getAttriList();
+    			System.out.println(inst.getName());
+    			for(AttributeModel attri : attriList){
+    				if(attri != null){
+    					if(!isNullOrEmpty(attri.getName()) && !isNullOrEmpty(attri.getValue())){
+	    		
+				    		//診断には必要ないので実際に動かすときには消す
+				    		System.out.println(attri.getName()+":"+attri.getValue());
+						}
+    				}
+    			}
+    		}
+    	}
     }
     private boolean checkSameName(){
     	//同名インスタンス、属性名が存在している場合のチェック
     	return true;
     }
     
-    private boolean isNullOrEmpty(String str){
+    private boolean isNullOrEmpty(String str){//nullか空の文字列であればtrue
     	return str == null || str.isEmpty();
     }
 
@@ -233,8 +260,11 @@ public class TabView extends JPanel
 
 	private void saveInstanceSpecificationInfo(IInstanceSpecification instanceSpecification) {
 		//図の属性名、属性値の取得
+		
+	    InstModel inst;//格納するための仮のinst
+	    AttributeModel attri;
+		
 		inst = new InstModel();//一時的なインスタンス、後にaddをして追加
-		attri = new AttributeModel();//一時的な属性名、属性値後にaddして追加
 
 		//str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
 		inst.setName(instanceSpecification.getName());
@@ -250,19 +280,22 @@ public class TabView extends JPanel
 		if(slots != null){
 			for (ISlot slot : slots) {
 				String s = slot.getDefiningAttribute()+"";//String変換方法がわからないので強引に作成
-				attri.setName(s);//属性名の格納
-				attri.setValue(slot.getValue());//属性値の格納
-	
-				//出力結果に出力（後に削除）
-				//str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
+				if(!isNullOrEmpty(s)){
+					attri = new AttributeModel();//一時的な属性名、属性値後にaddして追加
+					attri.setName(s);//属性名の格納
+					attri.setValue(slot.getValue());//属性値の格納
+					inst.addAttriList(attri);
+					//出力結果に出力（後に削除）
+					//str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
+				}
 			}
+			createObject.addInstList(inst);
 		}
-		inst.addAttriList(attri);
-		createObject.addInstList(inst);
 
-		//リンクのモデルへの格納とapiの理解がまだ・・・
+		//リンクのモデルへの格納と比較
 		if(links != null){
 			for (ILinkEnd link : links) {
+				System.out.println(link.getName());
 				/*
 				String s = link.getDefiningAttribute()+"";//String変換方法がわからないので強引に作成
 				attri.setName(s);//属性名の格納
