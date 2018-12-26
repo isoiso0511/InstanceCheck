@@ -46,7 +46,7 @@ class ObjectModel{
 	}
 
 	public void setScenario(String _scenario){
-		_scenario = _scenario.replace("\n","");
+		//_scenario = _scenario.replace("\n","");
 		_scenario = _scenario.replace("\t","");
 		_scenario = _scenario.replace(" ","");
 		this.scenario = _scenario;

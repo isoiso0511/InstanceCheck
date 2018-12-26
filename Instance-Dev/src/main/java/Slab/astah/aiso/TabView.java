@@ -15,6 +15,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileFilter;
+
+import java.io.File;
 
 import com.change_vision.jude.api.inf.AstahAPI;
 import com.change_vision.jude.api.inf.exception.InvalidUsingException;
@@ -24,9 +29,12 @@ import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.IElement;
 import com.change_vision.jude.api.inf.model.IInstanceSpecification;
 import com.change_vision.jude.api.inf.model.ILink;
+import com.change_vision.jude.api.inf.model.ILifelineLink;
+import com.change_vision.jude.api.inf.model.ILifeline;
 import com.change_vision.jude.api.inf.model.ILinkEnd;
 import com.change_vision.jude.api.inf.model.IModel;
 import com.change_vision.jude.api.inf.model.INamedElement;
+import com.change_vision.jude.api.inf.presentation.ILinkPresentation;
 import com.change_vision.jude.api.inf.model.ISlot;
 import com.change_vision.jude.api.inf.presentation.IPresentation;
 import com.change_vision.jude.api.inf.project.ProjectAccessor;
@@ -87,9 +95,23 @@ public class TabView extends JPanel
 		xmlButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				//xmlの選択するイベント
-				xml = new XmlReader();
-				//showObject(xml.Object);
-				textarea1.setText(xml.getObject().getScenario());
+			    JFileChooser filechooser = new JFileChooser("c:/WorkSpace/InstChecker/Instance-Dev/");
+			    FileFilter filter = new FileNameExtensionFilter("XMLファイル", "xml");
+			    filechooser.addChoosableFileFilter(filter);
+			    filechooser.setAcceptAllFileFilterUsed(false);
+			    int selected = filechooser.showOpenDialog(null);
+			    if (selected == JFileChooser.APPROVE_OPTION){
+			      File file = filechooser.getSelectedFile();
+			      System.out.println(file.getName());
+			      xml = new XmlReader(file.getPath());
+			      //showObject(xml.Object);
+			      textarea1.setText(xml.getObject().getScenario());
+			    }else if (selected == JFileChooser.CANCEL_OPTION){
+			    	System.out.println("キャンセルされました");
+			    }else if (selected == JFileChooser.ERROR_OPTION){
+			    	System.out.println("エラー又は取消しがありました");
+			    }
+			    
 			}
 		});
 
@@ -98,7 +120,7 @@ public class TabView extends JPanel
 				//診断のイベント
 				if(xml != null){//xmlが選択されている場合
 					getDiagram();//作成したオブジェクト図を同じモデルに格納
-					//showObject(createObject);
+					showObject(createObject);
 					diagnoseObject();//診断
 					textarea2.setText(str);
 					str = "";
@@ -142,7 +164,7 @@ public class TabView extends JPanel
 		    		
 		    		if(instNum == 1){
 			    		//診断には必要ないので実際に動かすときには消す
-			    		//str = str + "インスタンス名:"+inst.getName()+" は存在しています。"+"\n";
+			    		str = str + "インスタンス名:"+inst.getName()+" は存在しています。"+"\n";
 			    		checkAttribute(inst,xinst);//属性名,属性値を調べる
 		    		}
 		    	}
@@ -164,25 +186,28 @@ public class TabView extends JPanel
     	
     	cList = inst.getAttriList();//学習者の作成したオブジェクト図のインスタンスの属性リスト
     	xList = xinst.getAttriList();//xml
-    	boolean findFlag = false;
+    	boolean findFlag;
     	
     	for(AttributeModel cAttri : cList){
     		//チェック用あとで削除
     		//System.out.println("インスタンス名："+inst.getName()+" 属性名:"+cAttri.getName()+cAttri.getValue());
     		if(cAttri != null){
 	    		if(!isNullOrEmpty(cAttri.getName()) && !isNullOrEmpty(cAttri.getValue())){
+	    			int listNum = 0;
+	    			findFlag = false;
 	    			for(AttributeModel xAttri : xList){
 	    				
 		    			//今の所完全一致の体で作っている変更するかも
 				    	if(cAttri.getName().equals(xAttri.getName()) && 
-				    						cAttri.getValue().equals(xAttri.getValue())){
+				    						cAttri.getValue().equals(xAttri.getValue())&&findFlag == false){
 				    		
 				    		//診断には必要ないので実際に動かすときには消す
 				    		str = str + "インスタンス名："+inst.getName()+ "属性名:"+cAttri.getName()+"　は一致しています。"+"\n";
 				    		findFlag = true;
-				    	}else{
+				    	}else if(listNum == xList.size() - 1 &&findFlag == false){
 				    		str = str + "インスタンス名："+inst.getName()+ "属性名:"+cAttri.getName()+"　は見つかりませんでした。"+"\n";
 				    	}
+				    	listNum++;
 	    			}
 	    		}else if(!isNullOrEmpty(cAttri.getName()) && isNullOrEmpty(cAttri.getValue())){
 	    			str = str + "インスタンス名："+inst.getName()+" 属性名:"+cAttri.getName()+"　の属性値が入力されていません"+"\n";
@@ -199,13 +224,13 @@ public class TabView extends JPanel
     	for(InstModel inst:instList){
     		if(inst != null){
     			attriList = inst.getAttriList();
-    			System.out.println(inst.getName());
+    			//System.out.println(inst.getName());
     			for(AttributeModel attri : attriList){
     				if(attri != null){
-    					if(!isNullOrEmpty(attri.getName()) && !isNullOrEmpty(attri.getValue())){
+    					if(!(isNullOrEmpty(attri.getName()) && isNullOrEmpty(attri.getValue()))){
 	    		
 				    		//診断には必要ないので実際に動かすときには消す
-				    		System.out.println(attri.getName()+":"+attri.getValue());
+				    		//System.out.println(attri.getName()+":"+attri.getValue());
 						}
     				}
     			}
@@ -235,6 +260,8 @@ public class TabView extends JPanel
 			for(IPresentation presentation : presentations) {//インスタンス含んだ図の取得
 				getPresentationInfo(presentation);
 			}
+			
+			
 		} catch (ProjectNotFoundException e) {
 			e.printStackTrace();
 		} catch(InvalidUsingException e) {
@@ -251,10 +278,26 @@ public class TabView extends JPanel
 			return;
 
 		}
+		if(model instanceof ILink){//linkの取得
+			ILink link = ILink.class.cast(model);
+			saveLink(link);
+		}
+		
 		if (model instanceof INamedElement) {//インスタンス以外の図
 			INamedElement namedElement = INamedElement.class.cast(model);
 			return;
 
+		}
+	}
+	
+	private void saveLink(ILink _link){//linkの取得
+		System.out.println(_link.getName());//linkの名前（メッセージ部）の取得
+		ILinkEnd[] linkEnd = _link.getMemberEnds();
+		
+		if(linkEnd != null){
+			for(ILinkEnd link:linkEnd){
+				IInstanceSpecification inst = link.getType();
+			}
 		}
 	}
 
@@ -290,21 +333,6 @@ public class TabView extends JPanel
 				}
 			}
 			createObject.addInstList(inst);
-		}
-
-		//リンクのモデルへの格納と比較
-		if(links != null){
-			for (ILinkEnd link : links) {
-				System.out.println(link.getName());
-				/*
-				String s = link.getDefiningAttribute()+"";//String変換方法がわからないので強引に作成
-				attri.setName(s);//属性名の格納
-				attri.setValue(link.getValue());//属性値の格納
-	
-				//出力結果に出力（後に削除）
-				str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
-				*/
-			}
 		}
 
 	}

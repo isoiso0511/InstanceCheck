@@ -12,6 +12,7 @@ class InstModel{
 
 	private String linkName;//リンクの名前
 	private int linkPoint;//リンク先
+	
 
 
 	public InstModel getInst(){

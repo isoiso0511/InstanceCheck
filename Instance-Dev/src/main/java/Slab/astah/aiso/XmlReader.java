@@ -34,17 +34,17 @@ class XmlReader{
 	}
 	*/
 
-	XmlReader(){
-		readDom();
+	XmlReader(String path){
+		readDom(path);
 		//readSax();
 	}
 
-	private void readDom() {
+	private void readDom(String path) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			//Document doc = builder.parse(new File("C:/work/InstCheck/Instance-Dev/test.xml"));//xml読み込み
-			Document doc = builder.parse(new File("C:/WorkSpace/InstChecker/Instance-Dev/test.xml"));//astahのtest用
+			Document doc = builder.parse(new File(path));//astahのtest用
 			Element element = doc.getDocumentElement();
 			//System.out.println("Node: " + element.getNodeName());//ルートノードの取得
 			//System.out.println("code: " + element.getAttribute("id"));//属性値取得
