@@ -1,16 +1,25 @@
 package Slab.astah.aiso;
+
+import java.util.ArrayList;
+import java.util.List;
+
 class LinkModel{
-	private String linkName;//リンクの名前
+	private String name;//リンクの名前
 	private int linkStart;//リンク先
-	private int linkEnd;//
+	private int linkEnd;
+	
+	//リンクの端の2つのインスタンスのIDを保持
+	private List<String> linkPointList = new ArrayList<String>();
 
-
-	public String getLinkName() {
-		return this.linkName;
+	public void addLinkPoint(String pointId){
+		linkPointList.add(pointId);
+	}
+	public String getName() {
+		return this.name;
 	}
 
 	public void setLinkName(String _name) {
-		this.linkName = _name;
+		this.name = _name;
 	}
 
 	public int getLinkStart() {

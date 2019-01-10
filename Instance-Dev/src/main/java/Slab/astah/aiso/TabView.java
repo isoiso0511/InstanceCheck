@@ -58,6 +58,9 @@ public class TabView extends JPanel
     private String str;
     private XmlReader xml;//xmlから取得したオブジェクト図、情報の保存
     private ObjectModel createObject;//学習者の作成したオブジェクト図を保存
+    
+    private int instNum;
+    private int linkNum;
 
     public TabView() {
     	try {
@@ -140,41 +143,78 @@ public class TabView extends JPanel
 
     private void diagnoseObject() {
     	//オブジェクト図とxmlの照らし合わせる診断を予定
-    	List<InstModel> cList = new ArrayList<InstModel>();//学習者の作ったリストの取得
-    	cList = createObject.getInstList();
+    	List<InstModel> cInstList = new ArrayList<InstModel>();//学習者の作ったリストの取得
+    	cInstList = createObject.getInstList();
     	
-    	for(InstModel inst : cList){
-    		checkInst(inst);
+    	List<LinkModel> cLinkList = new ArrayList<LinkModel>();
+    	cLinkList = createObject.getLinkList();
+    	
+    	//インスタンスの診断
+    	for(InstModel inst : cInstList){
+    		checkInstList(inst);
+    	}
+    	
+    	//リンクの診断
+    	for(LinkModel link : cLinkList){
+    		checkLinkList(link);
     	}
     }
     
-    private void checkInst(InstModel inst){
+    private void checkLinkList(LinkModel link){
+    	LinkModel xLink = new LinkModel();
+    	List<LinkModel> xmlList = new ArrayList<LinkModel>();
+    	LinkModel matchlink = new LinkModel();
+    	xmlList = xml.getObject().getLinkList();
+    	for(LinkModel xlink : xmlList){
+    		if(xlink != null){
+    			
+    		}
+    	}
+    }
+    
+    private InstModel searchInst() {
+    	InstModel inst = new InstModel();
+    	return inst;
+    }
+    
+    private void checkInstList(InstModel inst){
+    	InstModel xInst = new InstModel();
+    	int instNum = 0;
     	List<InstModel> xmlList = new ArrayList<InstModel>();//xmlでの記述したListの取得
+    	InstModel matchInst = new InstModel();
     	xmlList = xml.getObject().getInstList();
-    	int instNum = 0;//同名のインスタンスの個数を表示２つある場合の診断も用意する
     	for(InstModel xinst : xmlList){
     		if(xinst != null){
 		    	if(inst.getName().equals(xinst.getName())){
 		    		instNum++;
-		    		
-		    		if(instNum > 1){
-		    			str = str + "インスタンス名:"+ inst.getName() +" 同名インスタンスが複数存在している\n";
-		    			continue;
-		    		}
-		    		
-		    		if(instNum == 1){
-			    		//診断には必要ないので実際に動かすときには消す
-			    		str = str + "インスタンス名:"+inst.getName()+" は存在しています。"+"\n";
-			    		checkAttribute(inst,xinst);//属性名,属性値を調べる
-		    		}
+		    		matchInst = xinst;
 		    	}
     		}
     	}
-    	
     	//診断出力部
-    	if(instNum == 0){
-    		str = str+ "インスタンス名:"+ inst.getName() +" インスタンス名が正しくない、または必要のないインスタンス\n";
+		if(instNum == 1){
+    		//診断には必要ないので実際に動かすときには消す
+    		str = str + "インスタンス名:"+inst.getName()+" は存在しています。"+"\n";
+    		checkAttribute(inst,matchInst);//属性名,属性値を調べる
+		}else if(instNum == 0){
+    		str = str+ "インスタンス名:"+ inst.getName() +" インスタンス名が正しくない、または必要のないインスタンスの可能性\n";
+    	}else if(instNum > 1){
+			str = str + "インスタンス名:"+ inst.getName() +" 同名インスタンスが複数存在している\n";
+		}
+    }
+    private InstModel checkOneInst(InstModel inst){
+    	List<InstModel> xmlList = new ArrayList<InstModel>();//xmlでの記述したListの取得
+    	InstModel matchInst = new InstModel();
+    	xmlList = xml.getObject().getInstList();
+    	
+    	for(InstModel xinst : xmlList){
+    		if(xinst != null){
+		    	if(inst.getName().equals(xinst.getName())){
+		    		matchInst = xinst;
+		    	}
+    		}
     	}
+    	return matchInst;
     }
     
     private void checkAttribute(InstModel inst,InstModel xinst){
@@ -237,10 +277,6 @@ public class TabView extends JPanel
     		}
     	}
     }
-    private boolean checkSameName(){
-    	//同名インスタンス、属性名が存在している場合のチェック
-    	return true;
-    }
     
     private boolean isNullOrEmpty(String str){//nullか空の文字列であればtrue
     	return str == null || str.isEmpty();
@@ -250,6 +286,9 @@ public class TabView extends JPanel
     	try {
 			project = prjAccessor.getProject();
 			createObject = new ObjectModel();
+			
+			instNum = 0;
+			linkNum = 0;
 
 			List<IPresentation> presentations = new ArrayList<IPresentation>();
 			IDiagram[] diagrams = project.getDiagrams();
@@ -292,12 +331,20 @@ public class TabView extends JPanel
 	
 	private void saveLink(ILink _link){//linkの取得
 		System.out.println(_link.getName());//linkの名前（メッセージ部）の取得
-		ILinkEnd[] linkEnd = _link.getMemberEnds();
+		ILinkEnd[] linkEnds = _link.getMemberEnds();
 		
-		if(linkEnd != null){
-			for(ILinkEnd link:linkEnd){
-				IInstanceSpecification inst = link.getType();
+		LinkModel link = new LinkModel();
+		linkNum++;//全体のリンクの数追加
+		if(linkEnds != null){
+			for(ILinkEnd linkEnd:linkEnds){
+				link = new LinkModel();//LinkModel
+				IInstanceSpecification inst = linkEnd.getType();
+				link.addLinkPoint(inst.getId());
 			}
+		}
+		
+		if(link != null){
+			createObject.addLinkList(link);
 		}
 	}
 
@@ -311,11 +358,12 @@ public class TabView extends JPanel
 
 		//str = str + "instanceSpecification name : " + instanceSpecification.getName()+"\n";
 		inst.setName(instanceSpecification.getName());
-
+		
 		ISlot[] slots = instanceSpecification.getAllSlots();//インスタンスの属性情報
 		IClass c  = instanceSpecification.getClassifier();//インスタンスのクラスの情報
-		ILinkEnd[] links = instanceSpecification.getLinkEnds();//インスタンスのリンク端の情報
-
+		
+		inst.setInstId(instNum);
+		instNum++;
 		if(c != null){
 			inst.setClassName(c.getName());//インスタンスのクラス名をセット
 		}
@@ -332,8 +380,8 @@ public class TabView extends JPanel
 					//str = str + "attribute : " + slot.getDefiningAttribute() + ", value : " + slot.getValue() + "\n";
 				}
 			}
-			createObject.addInstList(inst);
 		}
+		createObject.addInstList(inst);
 
 	}
 
@@ -365,7 +413,7 @@ public class TabView extends JPanel
 
   @Override
   public String getTitle() {
-    return "InstanceCheck";
+    return "ObjectCheck";
   }
 
   public void activated() {
