@@ -105,7 +105,11 @@ class XmlReader{
 								}else if(linkNode.getNodeName().equals("end")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
 									link.setLinkEnd(Integer.parseInt(ele.getFirstChild().getNodeValue()));
+								
+								}else if(linkNode.getNodeName().equals("point")){
+									link.addLinkPoint(Integer.parseInt(ele.getFirstChild().getNodeValue()));
 								}
+								
 							}
 						}
 						object.addLinkList(link);

@@ -9,10 +9,14 @@ class LinkModel{
 	private int linkEnd;
 	
 	//リンクの端の2つのインスタンスのIDを保持
-	private List<String> linkPointList = new ArrayList<String>();
+	private List<Integer> linkPointList = new ArrayList<Integer>();
 
-	public void addLinkPoint(String pointId){
+	public void addLinkPoint(int pointId){
 		linkPointList.add(pointId);
+	}
+	
+	public  List<Integer> getLinkPointList(){
+		return linkPointList;
 	}
 	public String getName() {
 		return this.name;
