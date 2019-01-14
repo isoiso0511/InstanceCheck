@@ -15,6 +15,10 @@ class LinkModel{
 		linkPointList.add(pointId);
 	}
 	
+	public void setLinkPoint(List<Integer> list){
+		linkPointList = list;
+	}
+	
 	public  List<Integer> getLinkPointList(){
 		return linkPointList;
 	}

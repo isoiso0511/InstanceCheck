@@ -123,12 +123,7 @@ public class TabView extends JPanel
 				//診断のイベント
 				if(xml != null){//xmlが選択されている場合
 					getDiagram();//作成したオブジェクト図を同じモデルに格納
-					
-					//System.out.println("-----------------------");
 			    	//showLinks(xml.getObject());
-			    	//System.out.println("-----------------------");
-			    	showLinks(createObject);
-			    	
 					diagnoseObject();//診断
 					textarea2.setText(str);
 					str = "";
@@ -176,19 +171,26 @@ public class TabView extends JPanel
     	xList =  xml.getObject().getLinkList();
 		if(link != null){
 			//リンク間のidに対応するインスタンスをcinst1,cinst2に取り出す
+			int i = 0;
 			for(int linkPoint:link.getLinkPointList()){
-    			if(cinst1 != null)cinst2 = searchIdCreateInst(linkPoint);
-    			else cinst1 = searchIdCreateInst(linkPoint);
+    			if(i==0)cinst1 = searchIdCreateInst(linkPoint);
+    			else if(i == 1) cinst2 = searchIdCreateInst(linkPoint);
+    			i++;
 			}
 		}
     	
 		for(LinkModel xLink : xList){
 			if(xLink != null){
 				//リンク間のidに対応するインスタンスをcinst1,cinst2に取り出す
-				for(int linkPoint:link.getLinkPointList()){
-	    			if(xinst1 == null)xinst1 = searchIdXmlInst(linkPoint);
-	    			else xinst2 = searchIdXmlInst(linkPoint);
+				int j = 0;
+				for(int linkPoint:xLink.getLinkPointList()){
+					System.out.println(linkPoint);
+	    			if(j == 0)xinst1 = searchIdXmlInst(linkPoint);
+	    			else if(j == 1) xinst2 = searchIdXmlInst(linkPoint);
+	    			j++;
 				}
+				
+				System.out.println("インスタンス名："+xinst1.getName()+ "　インスタンス名:"+xinst2.getName());
 				
 				if(cinst1 != null && cinst2 != null){
 			    	if((cinst1.getName().equals(xinst1.getName())&&cinst2.getName().equals(xinst2.getName()))
@@ -395,11 +397,12 @@ public class TabView extends JPanel
 	}
 	
 	private void saveLink(ILink _link){//linkの取得
-		System.out.println(_link.getName());//linkの名前（メッセージ部）の取得
+		//System.out.println(_link.getName());//linkの名前（メッセージ部）の取得
 		ILinkEnd[] linkEnds = _link.getMemberEnds();
 		int instId;
 		
 		LinkModel link = new LinkModel();
+		List<Integer> linkPointList = new ArrayList<Integer>();
 		link.setLinkName(_link.getName());
 		linkMaxNum++;//全体のリンクの数追加
 		if(linkEnds != null){
@@ -407,11 +410,13 @@ public class TabView extends JPanel
 				link = new LinkModel();//LinkModel
 				IInstanceSpecification inst = linkEnd.getType();
 				instId = searchNameToIdCreateInst(inst.getName());
-				link.addLinkPoint(instId);
+				//System.out.println("instid:"+instId);
+				linkPointList.add(instId);
 			}
 		}
 		
-		if(link != null){
+		if(link != null && linkPointList != null){
+			link.setLinkPoint(linkPointList);
 			createObject.addLinkList(link);
 		}
 	}
