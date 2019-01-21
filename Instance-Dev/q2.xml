@@ -1,65 +1,94 @@
 <Question id="001">
 	<scenario>
-		11月2日を日付に便名JAL231便、11月3日を日付に便名JAL234がある。
-		どちらの便も飛行機の機種は73Hであり総座席数が165席であるが
-		JAL231便の機体番号はJA804A、JAL234便の機体番号はJA804Bである。
-		JAL231便は08:05に東京(羽田)出発し、09:20に岡山に到着する。
-		JAL234便は13:05に羽田を出発し、14:20に岡山に到着する。
-		羽田空港の空港コードはHND。岡山空港の空港コードはOKJである。
+モデル記述
+・「便」は「日付」出発時間」「到着時間」がある
+・「便」ごとに「空港」をもち、「出発空港」、「到着空港」がある
+・「便」ごとに１つの「飛行機」がある
+・「空港」ごとに「空港コード」がある
+・「飛行機」には「機種」「総座席数」がある
+
+場面記述
+・11月2日に便名JAL231、11月3日に便名JAL234がある。
+・どちらの便も飛行機の機種は73Hであり総座席数が165席である。
+・JAL231便は時刻08:05に羽田を出発し、09:20に岡山に到着する。
+・JAL234便は時刻13:05に羽田を出発し、14:20に岡山に到着する。
+・羽田空港の空港コードはHND。岡山空港の空港コードはOKJである。
+・JAL231便は機体番号JA804Aの飛行機
+・JAL234便は機体番号JA804Bの飛行機
+
 	</scenario>
- 	<inst id="001">
+ 	<inst id="1">
 		<class>空港</class>
 		<name>岡山空港</name>
 		<attribute name="空港名">岡山空港</attribute>
 		<attribute name="空港コード">OKJ</attribute>
 	</inst>
-	<inst id="002">
+	<inst id="2">
 		<class>空港</class>
 		<name>羽田空港</name>
 		<attribute name="空港名">羽田空港</attribute>
 		<attribute name="空港コード">HND</attribute>
 	</inst>
- 	<inst id="003">
+ 	<inst id="3">
 		<class>便</class>
 		<name>JAL231</name>
 		<attribute name="便名">JAL231</attribute>
-		<attribute name="出発時刻">08:05</attribute>
-		<attribute name="到着時刻">09:20</attribute>
+		<attribute name="出発時間">08:05</attribute>
+		<attribute name="到着時間">09:20</attribute>
 		<attribute name="日付">11月2日</attribute>
 	</inst>
 	
-	<inst id="004">
+	<inst id="4">
 		<class>便</class>
 		<name>JAL234</name>
 		<attribute name="便名">JAL234</attribute>
-		<attribute name="出発時刻">13:05</attribute>
-		<attribute name="到着時刻">14:20</attribute>
+		<attribute name="出発時間">13:05</attribute>
+		<attribute name="到着時間">14:20</attribute>
 		<attribute name="日付">11月3日</attribute>
 	</inst>
 	
-	<inst id="005">
+	<inst id="5">
 		<class>飛行機</class>
 		<name>JA804A</name>
 		<attribute name="機体番号">JA804A</attribute>
-		<attribute name="機種名">73H</attribute>
+		<attribute name="機種">73H</attribute>
 		<attribute name="総座席数">165</attribute>
 	</inst>
-	<inst id="006">
+	<inst id="6">
 		<class>飛行機</class>
 		<name>JA804B</name>
 		<attribute name="機体番号">JA804B</attribute>
-		<attribute name="機種名">73H</attribute>
+		<attribute name="機種">73H</attribute>
 		<attribute name="総座席数">165</attribute>
 	</inst>
 	
 	<link>
-		<name></name>
-		<start>001</start>
-		<end>003</end>
+		<name>出発空港</name>
+		<point>3</point>
+		<point>2</point>
 	</link>
 	<link>
-		<name></name>
-		<start>001</start>
-		<end>002</end>
+		<name>到着空港</name>
+		<point>3</point>
+		<point>1</point>
+	</link>
+	
+	<link>
+		<name>出発空港</name>
+		<point>4</point>
+		<point>2</point>
+	</link>
+	<link>
+		<name>到着空港</name>
+		<point>4</point>
+		<point>1</point>
+	</link>
+	<link>
+		<point>3</point>
+		<point>5</point>
+	</link>
+	<link>
+		<point>4</point>
+		<point>6</point>
 	</link>
 </Question>

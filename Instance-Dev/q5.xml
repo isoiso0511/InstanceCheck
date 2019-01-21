@@ -1,0 +1,93 @@
+<Question id="001">
+	<scenario>
+大学での授業の履修システム
+モデル記述
+・「学生」は複数の「授業」を履修できる
+・「履修」した授業は、必ず受講できる
+・「学生」は、同じ「授業」を再履修することも可能である
+・「履修」では学生の「成績」や「履修年度」を記録する
+場面記述
+・田中さんは2019年に統計学と線形代数を履修している
+・高橋さんは2018年に履修した微分積分学を2019年にも履修をしている
+	</scenario>
+ 	<inst id="1">
+		<class>学生</class>
+		<name>田中</name>
+		<attribute name="名前">田中</attribute>
+	</inst>
+	<inst id="2">
+		<class>学生</class>
+		<name>高橋</name>
+		<attribute name="名前">高橋</attribute>
+	</inst>
+ 	<inst id="4">
+		<class>履修</class>
+		<name>履修1</name>
+		<attribute name="履修年度">2019年</attribute>
+	</inst>
+ 	<inst id="5">
+		<class>履修</class>
+		<name>履修2</name>
+		<attribute name="履修年度">2019年</attribute>
+	</inst>
+ 	<inst id="6">
+		<class>履修</class>
+		<name>履修3</name>
+		<attribute name="履修年度">2018年</attribute>
+	</inst>
+ 	<inst id="7">
+		<class>履修</class>
+		<name>履修4</name>
+		<attribute name="履修年度">2019年</attribute>
+	</inst>
+	 <inst id="8">
+		<class>授業</class>
+		<name>統計学</name>
+		<attribute name="授業名">統計学</attribute>
+	</inst>
+	</inst>
+	 	<inst id="9">
+		<class>授業</class>
+		<name>線形代数</name>
+		<attribute name="授業名">線形代数</attribute>
+	</inst>
+	</inst>
+	 	<inst id="10">
+		<class>授業</class>
+		<name>微分積分学</name>
+		<attribute name="授業名">微分積分学</attribute>
+	</inst>
+	<link>
+		<point>1</point>
+		<point>3</point>
+	</link>
+	<link>
+		<point>1</point>
+		<point>4</point>
+	</link>
+	
+	<link>
+		<point>2</point>
+		<point>5</point>
+	</link>
+	<link>
+		<point>2</point>
+		<point>6</point>
+	</link>
+	<link>
+		<point>3</point>
+		<point>7</point>
+	</link>
+	<link>
+		<point>4</point>
+		<point>8</point>
+	</link>
+	<link>
+		<point>5</point>
+		<point>9</point>
+	</link>
+	<link>
+		<point>6</point>
+		<point>9</point>
+	</link>
+</Question>

@@ -59,7 +59,7 @@ class XmlReader{
 						//System.out.println("--instance--");
 						//System.out.println(ele.getNodeName() +":"+ele.getAttribute("id"));
 						inst = new InstModel();
-						inst.setName(ele.getFirstChild().getNodeValue());
+						inst.setName(null);
 						inst.setInstId(Integer.parseInt(ele.getAttribute("id")));//string→int変換
 						//object.addInstList(inst);
 						//instの子ノード
@@ -95,8 +95,13 @@ class XmlReader{
 								ele = (Element)linkNode;
 								if(linkNode.getNodeName().equals("name")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
-									link.setLinkName(ele.getFirstChild().getNodeValue());
+									if(ele.getFirstChild().getNodeValue() != null){
+										link.setLinkName(ele.getFirstChild().getNodeValue());
+									}else{
+										link.setLinkName("");//空文字をリンクの名前としてセット
+									}
 
+								/*
 								}else if(linkNode.getNodeName().equals("start")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
 									link.setLinkStart(Integer.parseInt(ele.getFirstChild().getNodeValue()));
@@ -105,7 +110,7 @@ class XmlReader{
 								}else if(linkNode.getNodeName().equals("end")) {
 									//System.out.println(ele.getNodeName() + ": " + ele.getFirstChild().getNodeValue());
 									link.setLinkEnd(Integer.parseInt(ele.getFirstChild().getNodeValue()));
-								
+								*/
 								}else if(linkNode.getNodeName().equals("point")){
 									link.addLinkPoint(Integer.parseInt(ele.getFirstChild().getNodeValue()));
 								}

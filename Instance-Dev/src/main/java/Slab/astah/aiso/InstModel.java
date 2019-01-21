@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class InstModel{
-	private String instName;//instance名前
+	private String instName = "";//instance名前
 	private int instId;//instanceのid
 	private String className;//instanceのクラス名
 

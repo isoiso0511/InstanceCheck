@@ -1,0 +1,141 @@
+<Question id="1">
+	<scenario>
+英会話教室の会員管理システム
+モデル記述
+・「会員」は少なくとも１つの「コース」に所属する。
+・「会員」は途中で「コース」を変更し、複数の「コース」に属することが可能である
+・いずれの「コース」も必ず１人の「講師」が担当する。最低でも１以上の「コース」を受け持つ
+
+場面記述
+・会員の増田さんと田中さんは、マイケルが講師を担当するスタンダードAというコースに所属している。
+・会員の小林さんは、スミスが講師を担当するスタンダードBのコースに所属している。さらに、最近上達したため、ボビーが講師を担当するビジネスBのコースにも所属するようになった
+・会員の熊谷さんは、講師のジョンのファンなので、彼が担当するスタンダードC、海外旅行D、ビジネスEのコースの全てに所属している。
+	</scenario>
+ 	<inst id="1">
+		<class>会員</class>
+		<name>増田</name>
+		<attribute name="名前">増田</attribute>
+	</inst>
+ 	<inst id="2">
+		<class>会員</class>
+		<name>田中</name>
+		<attribute name="名前">田中</attribute>
+	</inst>
+ 	<inst id="3">
+		<class>会員</class>
+		<name>小林</name>
+		<attribute name="名前">小林</attribute>
+	</inst>
+ 	<inst id="4">
+		<class>会員</class>
+		<name>熊谷</name>
+		<attribute name="名前">熊谷</attribute>
+	</inst>
+ 	<inst id="5">
+		<class>コース</class>
+		<name>スタンダードA</name>
+		<attribute name="コース名">スタンダードA</attribute>
+	</inst>
+	
+ 	<inst id="6">
+		<class>コース</class>
+		<name>スタンダードB</name>
+		<attribute name="コース名">スタンダードB</attribute>
+	</inst>
+	
+ 	<inst id="7">
+		<class>コース</class>
+		<name>ビジネスB</name>
+		<attribute name="コース名">ビジネスB</attribute>
+	</inst>
+	
+ 	<inst id="8">
+		<class>コース</class>
+		<name>スタンダードC</name>
+		<attribute name="コース名">スタンダードC</attribute>
+	</inst>
+	
+ 	<inst id="9">
+		<class>コース</class>
+		<name>海外旅行D</name>
+		<attribute name="コース名">海外旅行D</attribute>
+	</inst>
+ 	<inst id="10">
+		<class>コース</class>
+		<name>ビジネスE</name>
+		<attribute name="コース名">ビジネスE</attribute>
+	</inst>
+	<inst id="11">
+		<class>講師</class>
+		<name>マイケル</name>
+		<attribute name="名前">マイケル</attribute>
+	</inst>
+	<inst id="12">
+		<class>講師</class>
+		<name>スミス</name>
+		<attribute name="名前">スミス</attribute>
+	</inst>
+	<inst id="13">
+		<class>講師</class>
+		<name>ボビー</name>
+		<attribute name="名前">ボビー</attribute>
+	</inst>
+	<inst id="14">
+		<class>講師</class>
+		<name>ジョン</name>
+		<attribute name="名前">ジョン</attribute>
+	</inst>
+	<link>
+		<point>1</point>
+		<point>5</point>
+	</link>
+	<link>
+		<point>2</point>
+		<point>5</point>
+	</link>
+	
+	<link>
+		<point>3</point>
+		<point>6</point>
+	</link>
+	<link>
+		<point>3</point>
+		<point>7</point>
+	</link>
+	<link>
+		<point>4</point>
+		<point>8</point>
+	</link>
+	<link>
+		<point>4</point>
+		<point>9</point>
+	</link>
+	<link>
+		<point>4</point>
+		<point>10</point>
+	</link>
+	<link>
+		<point>5</point>
+		<point>11</point>
+	</link>
+	<link>
+		<point>6</point>
+		<point>12</point>
+	</link>
+	<link>
+		<point>7</point>
+		<point>13</point>
+	</link>
+	<link>
+		<point>8</point>
+		<point>14</point>
+	</link>
+	<link>
+		<point>9</point>
+		<point>14</point>
+	</link>
+	<link>
+		<point>10</point>
+		<point>14</point>
+	</link>
+</Question>

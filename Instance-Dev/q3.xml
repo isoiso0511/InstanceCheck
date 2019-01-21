@@ -1,0 +1,86 @@
+<Question id="1">
+	<scenario>
+モデル記述
+・「顧客」は複数、「サービス」を受けられる
+・「顧客」は「販売」１つにつき、「製品」を一つ購入できる
+・「サービス」には「洗車」、「点検」、「販売」の３種
+・「販売」には「数量」がある
+・「製品」には「ハイオク」「レギュラー」「軽油」の３種ある
+場面記述
+・顧客の「田中」さんはガソリンスタンドで、車にレギュラーを２４L入れた。
+・レギュラーの料金は132円/L
+・顧客の「山田」さんは洗車を行い、軽油を10L入れた。
+・軽油の料金は110円/L
+	</scenario>
+ 	<inst id="1">
+		<class>顧客</class>
+		<name>田中</name>
+		<attribute name="名前">田中</attribute>
+	</inst>
+	<inst id="2">
+		<class>顧客</class>
+		<name>山田</name>
+		<attribute name="名前">山田</attribute>
+	</inst>
+ 	<inst id="3">
+		<class>販売</class>
+		<name>販売1</name>
+		<attribute name="数量">24L</attribute>
+	</inst>
+	
+ 	<inst id="4">
+		<class>販売</class>
+		<name>販売2</name>
+		<attribute name="数量">10L</attribute>
+	</inst>
+	
+ 	<inst id="5">
+		<class>販売</class>
+		<name>販売3</name>
+		<attribute name="数量">10L</attribute>
+	</inst>
+	
+	 <inst id="6">
+		<class>洗車</class>
+		<name>洗車1</name>
+	</inst>
+	
+	<inst id="7">
+		<class>レギュラー</class>
+		<attribute name="料金">132円/L</attribute>
+	</inst>
+	
+	<inst id="8">
+		<class>軽油</class>
+		<attribute name="料金">110円/L</attribute>
+	</inst>
+	<link>
+		<point>1</point>
+		<point>3</point>
+	</link>
+	<link>
+		<point>3</point>
+		<point>7</point>
+	</link>
+	
+	<link>
+		<point>2</point>
+		<point>4</point>
+	</link>
+	<link>
+		<point>2</point>
+		<point>5</point>
+	</link>
+	<link>
+		<point>2</point>
+		<point>6</point>
+	</link>
+	<link>
+		<point>4</point>
+		<point>8</point>
+	</link>
+	<link>
+		<point>5</point>
+		<point>7</point>
+	</link>
+</Question>
