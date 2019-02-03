@@ -1,0 +1,90 @@
+<Question id="001">
+	<scenario>
+＜モデル＞
+空港システム
+＜モデル記述＞
+・「便」は「日付」「出発時間」「到着時間」を必要
+・「便」は「出発空港」、「到着空港」がある
+・「便」ごとに１つの「飛行機」がある
+＜場面記述＞
+・「11月2日」に「便名」が「JAL231」、「11月3日」に「JAL234」がある。
+・どちらの便も飛行機の「機種」は「73H」であり「総座席数」が「165席」である。
+・「JAL231」便の固有の「機体番号」は「JA804A」、「JAL234」便の固有の「機体番号」は「JA804B」である。
+・「JAL231」便は「08:05」に「羽田空港」を出発し、「09:20」に「岡山空港」に到着する。
+・「JAL234」便は「13:05」に「羽田空港」を出発し、「14:20」に「岡山空港」に到着する。
+・「羽田空港」の「空港コード」は「HND」。「岡山空港」の「空港コード」は「OKJ」である。
+	</scenario>
+ 	<inst id="1">
+		<class>空港</class>
+		<name>岡山空港</name>
+		<attribute name="空港名">岡山空港</attribute>
+		<attribute name="空港コード">OKJ</attribute>
+	</inst>
+	<inst id="2">
+		<class>空港</class>
+		<name>羽田空港</name>
+		<attribute name="空港名">羽田空港</attribute>
+		<attribute name="空港コード">HND</attribute>
+	</inst>
+ 	<inst id="3">
+		<class>便</class>
+		<name>JAL231</name>
+		<attribute name="便名">JAL231</attribute>
+		<attribute name="出発時間">08:05</attribute>
+		<attribute name="到着時間">09:20</attribute>
+		<attribute name="日付">11月2日</attribute>
+	</inst>
+	
+	<inst id="4">
+		<class>便</class>
+		<name>JAL234</name>
+		<attribute name="便名">JAL234</attribute>
+		<attribute name="出発時間">13:05</attribute>
+		<attribute name="到着時間">14:20</attribute>
+		<attribute name="日付">11月3日</attribute>
+	</inst>
+	
+	<inst id="5">
+		<class>飛行機</class>
+		<name>JA804A</name>
+		<attribute name="機体番号">JA804A</attribute>
+		<attribute name="機種">73H</attribute>
+		<attribute name="総座席数">165</attribute>
+	</inst>
+	<inst id="6">
+		<class>飛行機</class>
+		<name>JA804B</name>
+		<attribute name="機体番号">JA804B</attribute>
+		<attribute name="機種">73H</attribute>
+		<attribute name="総座席数">165</attribute>
+	</inst>
+	<link>
+		<name>出発空港</name>
+		<point>3</point>
+		<point>2</point>
+	</link>
+	<link>
+		<name>到着空港</name>
+		<point>3</point>
+		<point>1</point>
+	</link>
+	
+	<link>
+		<name>出発空港</name>
+		<point>4</point>
+		<point>2</point>
+	</link>
+	<link>
+		<name>到着空港</name>
+		<point>4</point>
+		<point>1</point>
+	</link>
+	<link>
+		<point>3</point>
+		<point>5</point>
+	</link>
+	<link>
+		<point>4</point>
+		<point>6</point>
+	</link>
+</Question>
